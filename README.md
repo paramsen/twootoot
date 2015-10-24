@@ -1,5 +1,5 @@
-# twootoot [a frameworkless-ish twitter client]
-_Achieving excellence one tweet at a time._
+# twootoot
+_[a frameworkless-ish twitter client]_
 
 ## Breakdown
 ### Info
