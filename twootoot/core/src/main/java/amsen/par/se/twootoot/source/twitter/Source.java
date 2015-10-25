@@ -2,7 +2,7 @@ package amsen.par.se.twootoot.source.twitter;
 
 import android.os.AsyncTask;
 
-import amsen.par.se.twootoot.boilerplate.Callback;
+import amsen.par.se.twootoot.util.functional.Callback;
 import amsen.par.se.twootoot.source.twitter.result.Result;
 
 /**
@@ -13,11 +13,12 @@ import amsen.par.se.twootoot.source.twitter.result.Result;
  * Use getResultNAsync to get the Result delivered to the provided Callback. Use getResultN to
  * get a Model synchronously, i.e. blocking.
  *
- * This class is built in a functional pattern meant to be as generic as possible.
+ * This class is built in a functional pattern meant to be as generic as possible. If need for more
+ * than two parameter Types arise it would be viable to restructure this.
  *
  * @author params on 25/10/15
  */
-public abstract class Source<T extends Result> {
+public abstract class Source<Result1 extends Result, Param1, Param2> {
 	/**
 	 * Reset the Source. Ex. if the Source keeps a cache it should clear it.
 	 *
@@ -31,22 +32,21 @@ public abstract class Source<T extends Result> {
 	 *
 	 * @param p1 First param for getResult1
 	 * @param callback The Callback to get called when AsyncTask is finished/failed
-	 * @param <S> Type of first param
 	 */
-	protected <S> void getResult1Async(final S p1, final Callback<T> callback) {
-		new AsyncTask<Void, Void, Result<T>>() {
+	protected void getResult1Async(final Param1 p1, final Callback<Result1> callback) {
+		new AsyncTask<Void, Void, Result<Result1>>() {
 			@Override
-			protected void onPostExecute(Result<T> result) {
+			protected void onPostExecute(Result<Result1> result) {
 				callback.onComplete(result);
 			}
 
 			@Override
-			protected Result<T> doInBackground(Void... voids) {
+			protected Result1 doInBackground(Void... voids) {
 				return getResult1(p1);
 			}
 
 			@Override
-			protected void onCancelled(Result<T> result) {
+			protected void onCancelled(Result<Result1> result) {
 				callback.onComplete(result);
 			}
 		}.execute();
@@ -55,20 +55,20 @@ public abstract class Source<T extends Result> {
 	/**
 	 * Wrap getResultN in an AsyncTask. See getResult1Async.
 	 */
-	protected <S, R> void getResult2Async(final S p1, final R p2, final Callback<T> callback) {
-		new AsyncTask<Void, Void, Result<T>>() {
+	protected void getResult2Async(final Param1 p1, final Param2 p2, final Callback<Result1> callback) {
+		new AsyncTask<Void, Void, Result<Result1>>() {
 			@Override
-			protected void onPostExecute(Result<T> result) {
+			protected void onPostExecute(Result<Result1> result) {
 				callback.onComplete(result);
 			}
 
 			@Override
-			protected Result<T> doInBackground(Void... voids) {
+			protected Result1 doInBackground(Void... voids) {
 				return getResult2(p1, p2);
 			}
 
 			@Override
-			protected void onCancelled(Result<T> result) {
+			protected void onCancelled(Result<Result1> result) {
 				callback.onComplete(result);
 			}
 		}.execute();
@@ -79,17 +79,16 @@ public abstract class Source<T extends Result> {
 	 * not forking new threads that take part in constructing the Result.
 	 *
 	 * @param p1 Single param
-	 * @param <S> Type of p1
 	 * @return A Success object or a Failure.
 	 */
-	protected <S> Result<T> getResult1(S p1) {
+	protected Result1 getResult1(Param1 p1) {
 		throw new RuntimeException("Not supported by Source");
 	}
 
 	/**
 	 * Get Result with N parameter. See getResult1.
 	 */
-	protected <S, R> Result<T> getResult2(S p1, R p2) {
+	protected Result1 getResult2(Param1 p1, Param2 p2) {
 		throw new RuntimeException("Not supported by Source");
 	}
 }

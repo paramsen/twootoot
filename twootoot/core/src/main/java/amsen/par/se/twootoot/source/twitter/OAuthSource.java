@@ -2,10 +2,9 @@ package amsen.par.se.twootoot.source.twitter;
 
 import android.support.annotation.Nullable;
 
-import amsen.par.se.twootoot.BuildConfig;
-import amsen.par.se.twootoot.boilerplate.Callback;
+import amsen.par.se.twootoot.util.functional.Callback;
 import amsen.par.se.twootoot.model.twitter.OAuthConfig;
-import amsen.par.se.twootoot.source.twitter.result.Failure;
+import amsen.par.se.twootoot.model.twitter.OAuthFactory;
 import amsen.par.se.twootoot.source.twitter.result.Result;
 
 /**
@@ -13,8 +12,10 @@ import amsen.par.se.twootoot.source.twitter.result.Result;
  *
  * @author params on 25/10/15
  */
-public class AuthSource extends Source<Result<OAuthConfig>> {
-	private StorageSource<String, OAuthConfig> storage;
+public class OAuthSource extends Source<Result<OAuthConfig>, String, Void> {
+	private static final String STORAGE_KEY = "OAuthSource";
+
+	private StorageSource<OAuthConfig, Result<OAuthConfig>> storage;
 
 	/**
 	 * Validate with Twitter APIs that provided accessToken is valid. If accessToken is valid
@@ -31,49 +32,39 @@ public class AuthSource extends Source<Result<OAuthConfig>> {
 		getResult1Async(accessToken, callback);
 	}
 
-	@Override
-	protected Result getResult1(String accessToken) {
-		//try get from cache
-		if(accessToken != null) {
-			Result<OAuthConfig> cacheResult = getConfigFromCache();
+	@Override protected Result<OAuthConfig> getResult1(final String accessToken) {
+		if(accessToken == null) {
+			Result<OAuthConfig> cacheResult = storage.getByKey(STORAGE_KEY);
 
 			if(cacheResult.isSuccess()) {
-				return cacheResult;
-			} else {
-				
+				return validateConfig(cacheResult.asSuccess().get());
 			}
+
+			return cacheResult;
 		} else {
-			//build
-			//execute twitter http auth->if success cache resp->callback
-			//cache resp
+			invalidate();
+			Result<OAuthConfig> result = validateConfig(buildConfig(accessToken));
+
+			if(result.isSuccess()) {
+				storage.store(STORAGE_KEY, result.asSuccess().get());
+			}
+
+			return result;
 		}
 	}
 
-	private Result<OAuthConfig> getConfigFromCache() {
-		return null;
-	}
-
+	/**
+	 * Validate using Twitter APIs.
+	 */
 	private Result<OAuthConfig> validateConfig(OAuthConfig config) {
 		return null;
 	}
 
 	private OAuthConfig buildConfig(String accessToken) {
-		OAuthConfig auth = new OAuthConfig(
-				BuildConfig.OAUTH_CONSUMER_KEY,
-				accessToken,
-				BuildConfig.VERSION_NAME,
-				BuildConfig.OAUTH_SIGNATURE_METHOD,
-				generateNewConversationToken());
-
-		return auth;
+		return new OAuthFactory().build(accessToken);
 	}
 
-	private String generateNewConversationToken() {
-		return null;
-	}
-
-	@Override
-	public boolean invalidate() {
+	@Override public boolean invalidate() {
 		throw new RuntimeException("Not supported by Source");
 	}
 }

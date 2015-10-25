@@ -1,6 +1,6 @@
-package amsen.par.se.twootoot.com.twitter.task;
+package amsen.par.se.twootoot.webcom.twitter;
 
-import amsen.par.se.twootoot.boilerplate.Callback;
+import amsen.par.se.twootoot.utils.functional.Callback;
 
 /**
  * @author params on 25/10/15

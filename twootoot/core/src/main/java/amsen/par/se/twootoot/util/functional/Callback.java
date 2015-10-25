@@ -1,4 +1,4 @@
-package amsen.par.se.twootoot.boilerplate;
+package amsen.par.se.twootoot.util.functional;
 
 import amsen.par.se.twootoot.source.twitter.result.Result;
 

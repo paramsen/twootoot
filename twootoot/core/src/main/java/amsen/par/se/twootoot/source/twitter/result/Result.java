@@ -17,10 +17,10 @@ public abstract class Result<T> {
 	}
 
 	public boolean isSuccess() {
-		return this instanceof Success;
+		return this instanceof Success && asSuccess().get() != null;
 	}
 
 	public boolean isFailure() {
-		return this instanceof Failure;
+		return this instanceof Failure && asFailure().get() != null;
 	}
 }

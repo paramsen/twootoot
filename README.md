@@ -2,7 +2,7 @@
 _Acheiving Twitter excellence 140 chars at a time._
 
 ## Breakdown
-_[a frameworkless-ish twitter client in Android]_
+_[a MVC twitter client in Android]_
 ### Info
 This project is aimed at achieving a basic twitter integration complete with some basic user interaction listed below using no frameworks.
 Why no frameworks? Well just to show some good'ol Java knowledge.
@@ -11,7 +11,7 @@ Why no frameworks? Well just to show some good'ol Java knowledge.
 * Feature a design fit for 2016, just to differ from the official Twitter client.
 
 ### Features & functionality
-* MVC-ish separation (to the extent viable using vanilla Android)
+* MVC-ish separation (to the extent viable without going crazy using vanilla Android)
 * Login
 * View feed
 * Retweet
