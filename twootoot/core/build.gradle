@@ -12,13 +12,24 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            buildConfigField "String", "OAUTH_CONSUMER_KEY", "\"bar\""
+            buildConfigField "String", "OAUTH_SIGNATURE_METHOD", "\"HMAC-SHA1\""
+            buildConfigField "String", "OAUTH_VERSION", "\"1.0\""
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "OAUTH_CONSUMER_KEY", "\"bar\""
+            buildConfigField "String", "OAUTH_SIGNATURE_METHOD", "\"HMAC-SHA1\""
+            buildConfigField "String", "OAUTH_VERSION", "\"1.0\""
         }
     }
 }
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.google.code.gson:gson:2.4'
 }

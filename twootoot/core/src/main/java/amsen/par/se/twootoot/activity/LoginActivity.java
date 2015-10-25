@@ -1,9 +1,11 @@
-package amsen.par.se.twootoot;
+package amsen.par.se.twootoot.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import amsen.par.se.twootoot.R;
 
 public class LoginActivity extends AppCompatActivity {
 
