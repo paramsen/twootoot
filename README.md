@@ -26,10 +26,10 @@ Why no frameworks? Well just to show some good'ol Java knowledge.
 Planning in iterations where the result of each finished iteration is presentable to the (hypothetical) client.
 
 * __Iteration 1__
-  * MVC boilerplate
-  * Login simple UX/UI
-* __Iteration 2__
+  * Model in [M]VC
   * HTTP boilerplate
+    * Twitter auth
+* __Iteration 2__
   * Login
     * Twitter integration
 * __Iteration 3__
