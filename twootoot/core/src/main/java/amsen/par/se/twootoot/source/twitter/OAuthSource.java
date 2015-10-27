@@ -2,17 +2,22 @@ package amsen.par.se.twootoot.source.twitter;
 
 import android.support.annotation.Nullable;
 
-import amsen.par.se.twootoot.util.functional.Callback;
 import amsen.par.se.twootoot.model.twitter.OAuthConfig;
 import amsen.par.se.twootoot.model.twitter.OAuthFactory;
+import amsen.par.se.twootoot.source.twitter.result.Failure;
 import amsen.par.se.twootoot.source.twitter.result.Result;
+import amsen.par.se.twootoot.source.twitter.result.Success;
+import amsen.par.se.twootoot.util.functional.Callback;
+import amsen.par.se.twootoot.webcom.resource.twitter.OAuthResource.OAuthReq;
+import amsen.par.se.twootoot.webcom.resource.twitter.OAuthResource.OAuthResourceConfig;
+import amsen.par.se.twootoot.webcom.resource.twitter.OAuthResource.OAuthResp;
 
 /**
- * Source for retrieving an OAuthConfig
+ * Source for retrieving an OAuthResourceConfig
  *
  * @author params on 25/10/15
  */
-public class OAuthSource extends Source<Result<OAuthConfig>, String, Void> {
+public class OAuthSource extends AbstractHTTPSource<OAuthReq, OAuthResp, OAuthResourceConfig, Result<OAuthConfig>, String, Void> {
 	private static final String STORAGE_KEY = "OAuthSource";
 
 	private StorageSource<OAuthConfig, Result<OAuthConfig>> storage;
@@ -57,7 +62,13 @@ public class OAuthSource extends Source<Result<OAuthConfig>, String, Void> {
 	 * Validate using Twitter APIs.
 	 */
 	private Result<OAuthConfig> validateConfig(OAuthConfig config) {
-		return null;
+		Result<OAuthResp> result = performRequest(new OAuthReq(), new OAuthResourceConfig());
+
+		if(result.isSuccess()) {
+			return new Success<>(config);
+		} else {
+			return new Failure<>(result.asFailure());
+		}
 	}
 
 	private OAuthConfig buildConfig(String accessToken) {
@@ -65,6 +76,6 @@ public class OAuthSource extends Source<Result<OAuthConfig>, String, Void> {
 	}
 
 	@Override public boolean invalidate() {
-		throw new RuntimeException("Not supported by Source");
+		return storage.invalidate(STORAGE_KEY);
 	}
 }

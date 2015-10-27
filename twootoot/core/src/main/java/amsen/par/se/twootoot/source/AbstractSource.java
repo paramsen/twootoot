@@ -1,4 +1,4 @@
-package amsen.par.se.twootoot.source.twitter;
+package amsen.par.se.twootoot.source;
 
 import android.os.AsyncTask;
 
@@ -6,7 +6,7 @@ import amsen.par.se.twootoot.util.functional.Callback;
 import amsen.par.se.twootoot.source.twitter.result.Result;
 
 /**
- * A Source is responsible for building and providing the model wrapped as a Result<?>. If a problem
+ * A AbstractSource is responsible for building and providing the model wrapped as a Result<?>. If a problem
  * occurs executing getResultN the returned Result should be a wrapped Failure (which is a wrapper
  * for an Exception).
  *
@@ -18,9 +18,9 @@ import amsen.par.se.twootoot.source.twitter.result.Result;
  *
  * @author params on 25/10/15
  */
-public abstract class Source<Result1 extends Result, Param1, Param2> {
+public abstract class AbstractSource<Result1 extends Result, Param1, Param2> {
 	/**
-	 * Reset the Source. Ex. if the Source keeps a cache it should clear it.
+	 * Reset the AbstractSource. Ex. if the AbstractSource keeps a cache it should clear it.
 	 *
 	 * @return true if invalidation was successful
 	 */

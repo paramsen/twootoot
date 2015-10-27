@@ -1,4 +1,4 @@
-package amsen.par.se.twootoot.source.twitter;
+package amsen.par.se.twootoot.source;
 
 /**
  * @author params on 25/10/15

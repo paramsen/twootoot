@@ -15,6 +15,10 @@ public class Failure<T> extends Result<T> {
 		this.ex = ex;
 	}
 
+	public Failure(Failure inner) {
+		this.ex = inner.get();
+	}
+
 	public Throwable get() {
 		return ex;
 	}
