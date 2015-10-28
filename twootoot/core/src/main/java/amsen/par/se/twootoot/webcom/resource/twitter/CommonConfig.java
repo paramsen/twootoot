@@ -4,8 +4,6 @@ import android.net.Uri;
 
 import java.util.concurrent.TimeUnit;
 
-import amsen.par.se.twootoot.webcom.ResourceConfig;
-
 /**
  * @author params on 27/10/15
  */

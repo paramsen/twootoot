@@ -1,72 +1,66 @@
 package amsen.par.se.twootoot.model.twitter;
 
+import android.util.Pair;
+
+import java.util.concurrent.TimeUnit;
+
+import amsen.par.se.twootoot.BuildConfig;
+
 /**
  * Config for Twitter OAuth authorization
  *
  * @author params on 25/10/15
  */
 public class OAuthConfig extends AbstractModel {
-	private String consumerKey;
-	private String accessToken;
-	private String version;
-	private String signatureMethod;
-	private String nonce;
-	private long timestamp;
+	public final String consumerKey;
+	public final String accessToken;
+	public final String accessSecret;
+	public final String version;
+	public final String signatureMethod;
+	public String nonce;
+	public long timestamp;
 
-	protected OAuthConfig(String consumerKey, String accessToken, String version, String signatureMethod, String nonce, long timestamp) {
+	public OAuthConfig(OAuthTokens OAuthTokens) {
+		this(BuildConfig.OAUTH_CONSUMER_KEY, OAuthTokens.accessToken, OAuthTokens.accessSecret, BuildConfig.OAUTH_VERSION, BuildConfig.OAUTH_SIGNATURE_METHOD, generateNonce(), getTimestamp());
+	}
+
+	public OAuthConfig(String consumerKey, String accessToken, String accessSecret, String version, String signatureMethod, String nonce, long timestamp) {
 		this.consumerKey = consumerKey;
 		this.accessToken = accessToken;
+		this.accessSecret = accessSecret;
 		this.version = version;
 		this.signatureMethod = signatureMethod;
 		this.nonce = nonce;
 		this.timestamp = timestamp;
 	}
 
-	public String getConsumerKey() {
-		return consumerKey;
+	public OAuthConfig prepareForRequest() {
+		nonce = generateNonce();
+		timestamp = getTimestamp();
+
+		return this;
 	}
 
-	public void setConsumerKey(String consumerKey) {
-		this.consumerKey = consumerKey;
+	/**
+	 * Construct the delicately formatted 'Authorization' header following the Twitter/OAuth
+	 * protocol
+	 */
+	public Pair<String, String> buildOAuthHeader() {
+		String key = "Authorization";
+
+		return null;
 	}
 
-	public String getAccessToken() {
-		return accessToken;
+	private static long getTimestamp() {
+		return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
 	}
 
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
+	private static String generateNonce() {
+		return null;
 	}
 
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public String getSignatureMethod() {
-		return signatureMethod;
-	}
-
-	public void setSignatureMethod(String signatureMethod) {
-		this.signatureMethod = signatureMethod;
-	}
-
-	public String getNonce() {
-		return nonce;
-	}
-
-	public void setNonce(String nonce) {
-		this.nonce = nonce;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+	public static class OAuthTokens {
+		public String accessToken;
+		public String accessSecret;
 	}
 }
