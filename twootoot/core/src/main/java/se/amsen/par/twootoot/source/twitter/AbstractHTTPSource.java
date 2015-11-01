@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 import se.amsen.par.twootoot.source.AbstractSource;
+import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.webcom.Request;
 import se.amsen.par.twootoot.webcom.Response;
@@ -16,7 +17,7 @@ import se.amsen.par.twootoot.webcom.Response;
  *
  * @author params on 28/10/15
  */
-public abstract class AbstractHTTPSource<Req extends Request, Resp extends Response, Result1 extends Result, Param1, Param2> extends AbstractSource<Result1, Param1, Param2> {
+public abstract class AbstractHTTPSource<Req extends Request, Resp extends Response, Result1, Param1, Param2> extends AbstractSource<Result1,  Param1, Param2> {
 	private static final String TAG = AbstractHTTPSource.class.getCanonicalName();
 
 	public Result<Resp> performRequest(Req req, Class<Resp> responseClass) {
@@ -40,8 +41,7 @@ public abstract class AbstractHTTPSource<Req extends Request, Resp extends Respo
 //			GsonUtil.gson.fromJson(builder.toString(), responseClass);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception during HTTP logic", e);
-		} catch (Exception e) {
-			Log.e(TAG, "Exception during HTTP logic", e);
+			response = new Failure<>(e);
 		} finally {
 			try {
 				if(urlConnection != null) {

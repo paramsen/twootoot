@@ -2,8 +2,8 @@ package se.amsen.par.twootoot.source;
 
 import android.os.AsyncTask;
 
-import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.util.functional.Callback;
 
 /**
  * A AbstractSource is responsible for building and providing the model wrapped as a Result<?>. If a problem
@@ -18,7 +18,7 @@ import se.amsen.par.twootoot.source.twitter.result.Result;
  *
  * @author params on 25/10/15
  */
-public abstract class AbstractSource<Result1 extends Result, Param1, Param2> {
+public abstract class AbstractSource<Result1, Param1, Param2> {
 	/**
 	 * Reset the AbstractSource. Ex. if the AbstractSource keeps a cache it should clear it.
 	 *
@@ -41,7 +41,7 @@ public abstract class AbstractSource<Result1 extends Result, Param1, Param2> {
 			}
 
 			@Override
-			protected Result1 doInBackground(Void... voids) {
+			protected Result<Result1> doInBackground(Void... voids) {
 				return getResult1(p1);
 			}
 
@@ -63,7 +63,7 @@ public abstract class AbstractSource<Result1 extends Result, Param1, Param2> {
 			}
 
 			@Override
-			protected Result1 doInBackground(Void... voids) {
+			protected Result<Result1> doInBackground(Void... voids) {
 				return getResult2(p1, p2);
 			}
 
@@ -81,14 +81,14 @@ public abstract class AbstractSource<Result1 extends Result, Param1, Param2> {
 	 * @param p1 Single param
 	 * @return A Success object or a Failure.
 	 */
-	protected Result1 getResult1(Param1 p1) {
+	protected Result<Result1> getResult1(Param1 p1) {
 		throw new RuntimeException("Not supported by Source");
 	}
 
 	/**
 	 * Get Result with N parameter. See getResult1.
 	 */
-	protected Result1 getResult2(Param1 p1, Param2 p2) {
+	protected Result<Result1> getResult2(Param1 p1, Param2 p2) {
 		throw new RuntimeException("Not supported by Source");
 	}
 }

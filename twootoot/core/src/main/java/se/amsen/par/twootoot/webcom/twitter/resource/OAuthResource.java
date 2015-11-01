@@ -23,5 +23,7 @@ public class OAuthResource extends Resource {
 		public OAuthResp(CacheMode cacheMode) {
 			super(cacheMode);
 		}
+
+		public int httpStatus;
 	}
 }

@@ -16,7 +16,7 @@ import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
  *
  * @author params on 25/10/15
  */
-public class OAuthSource extends AbstractHTTPSource<OAuthReq, OAuthResp, Result<OAuthConfig>, OAuthTokens, Void> {
+public class OAuthSource extends AbstractHTTPSource<OAuthReq, OAuthResp, OAuthConfig, OAuthTokens, Void> {
 	private static final String STORAGE_KEY = "OAuthSource";
 
 	private StorageSource<OAuthConfig, Result<OAuthConfig>> storage;
@@ -32,7 +32,7 @@ public class OAuthSource extends AbstractHTTPSource<OAuthReq, OAuthResp, Result<
 	 * @param tokens (@Nullable) accessToken from user.
 	 * @param callback Callback to be called when a Result is ready.
 	 */
-	public void authorizeAsync(@Nullable OAuthTokens tokens, Callback<Result<OAuthConfig>> callback) {
+	public void authorizeAsync(@Nullable OAuthTokens tokens, Callback<OAuthConfig> callback) {
 		getResult1Async(tokens, callback);
 	}
 
