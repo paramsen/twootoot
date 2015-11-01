@@ -1,6 +1,9 @@
 package se.amsen.par.twootoot.util.utils;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -8,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import se.amsen.par.twootoot.util.annotation.Exclude;
 
 /**
  * Static Gson utils
@@ -18,7 +23,7 @@ public class GsonUtil {
 	public static Gson gson;
 
 	static {
-		gson = new Gson();
+		gson = new GsonBuilder().setExclusionStrategies(new AnnotationExclusionStrategy()).create();
 	}
 
 	public static JsonObject merge(JsonObject in1, JsonObject in2) {
@@ -35,6 +40,9 @@ public class GsonUtil {
 		return out;
 	}
 
+	/**
+	 * Shallow lexicographical sort of entries in JsonObject
+	 */
 	public static JsonObject lexSort(JsonObject in) {
 		JsonObject out = new JsonObject();
 		List<String> keys = new ArrayList<>(in.entrySet().size());
@@ -58,5 +66,19 @@ public class GsonUtil {
 	 */
 	public static <T, E> E deepCopy(T t, Class<E> type) {
 		return gson.fromJson(gson.toJson(t), type);
+	}
+
+	/**
+	 * ExclusionStrategy for Gson, excludes everything annotated with @Exclude, more declarative
+	 * than using transient keyword.
+	 */
+	private static class AnnotationExclusionStrategy implements ExclusionStrategy {
+		public boolean shouldSkipClass(Class<?> clazz) {
+			return clazz.getAnnotation(Exclude.class) != null;
+		}
+
+		public boolean shouldSkipField(FieldAttributes f) {
+			return f.getAnnotation(Exclude.class) != null;
+		}
 	}
 }

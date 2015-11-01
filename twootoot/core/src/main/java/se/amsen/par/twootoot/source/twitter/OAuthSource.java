@@ -16,7 +16,7 @@ import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
  *
  * @author params on 25/10/15
  */
-public class OAuthSource extends AbstractHTTPSource<OAuthReq, OAuthResp, OAuthConfig, OAuthTokens, Void> {
+public class OAuthSource extends AbstractHttpSource<OAuthReq, OAuthResp, OAuthConfig, OAuthTokens, Void> {
 	private static final String STORAGE_KEY = "OAuthSource";
 
 	private StorageSource<OAuthConfig, Result<OAuthConfig>> storage;
