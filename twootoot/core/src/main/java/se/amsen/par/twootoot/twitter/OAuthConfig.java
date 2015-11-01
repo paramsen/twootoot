@@ -1,0 +1,85 @@
+package se.amsen.par.twootoot.twitter;
+
+import android.util.Pair;
+
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import se.amsen.par.twootoot.BuildConfig;
+
+/**
+ * Config for Twitter OAuth authorization
+ *
+ * @author params on 25/10/15
+ */
+public class OAuthConfig extends AbstractModel {
+	public  String consumerKey;
+	public  String accessToken;
+	public  String accessSecret;
+	public  String version;
+	public  String signatureMethod;
+	public String nonce;
+	public long timestamp;
+
+	public OAuthConfig(OAuthTokens OAuthTokens) {
+		this(BuildConfig.OAUTH_CONSUMER_KEY, OAuthTokens.accessToken, OAuthTokens.accessSecret, BuildConfig.OAUTH_VERSION, BuildConfig.OAUTH_SIGNATURE_METHOD);
+	}
+
+	public OAuthConfig(String consumerKey, String accessToken, String accessSecret, String version, String signatureMethod) {
+		this.consumerKey = consumerKey;
+		this.accessToken = accessToken;
+		this.accessSecret = accessSecret;
+		this.version = version;
+		this.signatureMethod = signatureMethod;
+
+		this.nonce = generateNonce();
+		this.timestamp = getTimestamp();
+	}
+
+	public OAuthConfig prepareForRequest() {
+		nonce = generateNonce();
+		timestamp = getTimestamp();
+
+		return this;
+	}
+
+	/**
+	 * Construct the delicately formatted 'Authorization' header following the Twitter/OAuth
+	 * protocol
+	 */
+	public Pair<String, String> buildOAuthHeader() {
+		String key = "Authorization";
+
+		return null;
+	}
+
+	private long getTimestamp() {
+		return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+	}
+
+	/**
+	 * Generate the Twitter OAuth nonce header token. The nonce is a client generated token that
+	 * identifies a single request.
+	 */
+	private String generateNonce() {
+		String nonce = "";
+		byte[] nonsense = new byte[32];
+		new Random().nextBytes(nonsense);
+
+		for(byte b : nonsense) {
+			nonce.concat(String.valueOf(b));
+		}
+
+		return nonce;
+	}
+
+	public static class OAuthTokens {
+		public String accessToken;
+		public String accessSecret;
+
+		public OAuthTokens(String accessToken, String accessSecret) {
+			this.accessToken = accessToken;
+			this.accessSecret = accessSecret;
+		}
+	}
+}

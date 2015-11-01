@@ -1,0 +1,13 @@
+/**
+ * This is how my private ignore.gradle looks like, it defines an associative array/map in groovy
+ * for private/sensitive properties.
+ *
+ * Values here may be exposed in generated build files so make sure to ignore those.
+ */
+ext {
+    ignore = [:]
+    ignore.consumerKey = 'key'
+    ignore.accessToken = 'token'
+    ignore.accessTokenSecret = 'secret-token'
+    //... and more properties etc
+}

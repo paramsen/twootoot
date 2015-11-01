@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="amsen.par.se.twootoot" >
+    package="se.amsen.par.twootoot" >
 
     <application
         android:allowBackup="true"

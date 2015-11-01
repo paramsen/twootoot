@@ -1,35 +1,55 @@
 apply plugin: 'com.android.application'
+apply from: 'ignore.gradle' //This file is ignored, look at publicIgnore.gradle for more info
+
+def str = {"\"$it\""}
 
 android {
     compileSdkVersion 23
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "amsen.par.se.twootoot"
+        applicationId "se.amsen.par.twootoot"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
-        debug {
-            buildConfigField "String", "OAUTH_CONSUMER_KEY", "\"bar\""
-            buildConfigField "String", "OAUTH_SIGNATURE_METHOD", "\"HMAC-SHA1\""
-            buildConfigField "String", "OAUTH_VERSION", "\"1.0\""
+        all {
+            buildConfigField "String", "OAUTH_CONSUMER_KEY", str(ignore.consumerKey) //Assoc. array defined in ignored.gradle
+            buildConfigField "String", "OAUTH_ACCESS_TOKEN", str(ignore.accessToken)
+            buildConfigField "String", "OAUTH_ACCESS_TOKEN_SECRET", str(ignore.accessTokenSecret)
+            buildConfigField "String", "OAUTH_SIGNATURE_METHOD", str("HMAC-SHA1")
+            buildConfigField "String", "OAUTH_VERSION", str("1.0")
+            buildConfigField "String", "TWITTER_CHARSET", str("UTF-8")
         }
+
+        debug { }
 
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 
-            buildConfigField "String", "OAUTH_CONSUMER_KEY", "\"bar\""
-            buildConfigField "String", "OAUTH_SIGNATURE_METHOD", "\"HMAC-SHA1\""
-            buildConfigField "String", "OAUTH_VERSION", "\"1.0\""
+    sourceSets {
+        androidTest {
+            manifest.srcFile 'src/androidTest/AndroidManifest.xml'
         }
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.google.code.gson:gson:2.4'
+
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    androidTestCompile 'com.android.support.test:rules:0.3'
+    androidTestCompile 'com.android.support:support-annotations:23.1.0'
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
 }
+
