@@ -1,12 +1,13 @@
 package se.amsen.par.twootoot.source.twitter;
 
-import android.test.InstrumentationTestCase;
 import android.util.Pair;
+
+import amsen.par.se.testlib.UnitTestUtil;
 
 /**
  * @author params on 03/11/15
  */
-public class SharedStorageSourceTest extends InstrumentationTestCase {
+public class SharedStorageSourceTest extends UnitTestUtil {
 	String key = "mockKey";
 	SharedStorageSource<Pair<String, String>> storage;
 

@@ -2,8 +2,7 @@ package se.amsen.par.twootoot.webcom.twitter;
 
 import android.net.Uri;
 
-import junit.framework.TestCase;
-
+import amsen.par.se.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.twitter.OAuthConfig;
 import se.amsen.par.twootoot.twitter.OAuthConfig.OAuthTokens;
@@ -12,7 +11,7 @@ import se.amsen.par.twootoot.webcom.Request;
 /**
  * @author params on 03/11/15
  */
-public class TwitterRequestTest extends TestCase {
+public class TwitterRequestTest extends UnitTestUtil {
 	TwitterRequest request;
 	OAuthConfig oauth;
 

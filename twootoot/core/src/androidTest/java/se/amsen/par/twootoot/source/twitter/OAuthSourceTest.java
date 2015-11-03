@@ -1,7 +1,6 @@
 package se.amsen.par.twootoot.source.twitter;
 
-import android.test.InstrumentationTestCase;
-
+import amsen.par.se.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author params on 30/10/15
  */
-public class OAuthSourceTest extends InstrumentationTestCase {
+public class OAuthSourceTest extends UnitTestUtil {
 	OAuthSource source;
 	SharedStorageSource<OAuthTokens> storage;
 

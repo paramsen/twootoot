@@ -1,7 +1,6 @@
 package se.amsen.par.twootoot.source.twitter;
 
-import android.test.InstrumentationTestCase;
-
+import amsen.par.se.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.twitter.OAuthConfig;
@@ -15,12 +14,13 @@ import static se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthR
  *
  * @author params on 01/11/15
  */
-public class TwitterIntegrationTest extends InstrumentationTestCase {
+public class TwitterIntegrationTest extends UnitTestUtil {
 	OAuthSource oauth;
 
 	@Override public void setUp() throws Exception {
 		super.setUp();
 		oauth = new OAuthSource(getInstrumentation().getContext());
+		oauth.storage.invalidate();
 	}
 
 	public void testGetHomeTimeline() throws Exception {

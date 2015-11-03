@@ -35,7 +35,8 @@ android {
 
     sourceSets {
         androidTest {
-            manifest.srcFile 'src/androidTest/AndroidManifest.xml'
+            manifest.srcFile 'src/androidTestLib/AndroidManifest.xml'
+            java.srcDirs = ['src/androidTest/java', 'src/androidTestLib/java']
         }
     }
 }

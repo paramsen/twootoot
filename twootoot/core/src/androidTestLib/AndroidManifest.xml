@@ -2,5 +2,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="se.amsen.par.testing">
-    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18" />
+    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18, se.amsen.par.testing" />
 </manifest>

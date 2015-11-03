@@ -17,7 +17,7 @@ import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthReq;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
 
 /**
- * Source for retrieving an OAuthResourceConfig
+ * Source for retrieving an OAuthConfig
  *
  * @author params on 25/10/15
  */
@@ -48,6 +48,9 @@ public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthCon
 		getResult1Async(tokens, callback);
 	}
 
+	/**
+	 * Will always instantiate a new OAuthConfig as nonce/timestamp must be unique for each request.
+	 */
 	@Override protected Result<OAuthConfig> getResult1(final OAuthTokens tokens) {
 		if(tokens == null) {
 			Result<OAuthTokens> fromCache = storage.getByKey(STORAGE_KEY);
