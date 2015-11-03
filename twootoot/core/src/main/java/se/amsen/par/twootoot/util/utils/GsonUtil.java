@@ -2,6 +2,7 @@ package se.amsen.par.twootoot.util.utils;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -23,7 +24,10 @@ public class GsonUtil {
 	public static Gson gson;
 
 	static {
-		gson = new GsonBuilder().setExclusionStrategies(new AnnotationExclusionStrategy()).create();
+		gson = new GsonBuilder()
+				.setExclusionStrategies(new AnnotationExclusionStrategy())
+				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+				.create();
 	}
 
 	public static JsonObject merge(JsonObject in1, JsonObject in2) {

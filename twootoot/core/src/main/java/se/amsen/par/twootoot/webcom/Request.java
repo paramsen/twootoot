@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.util.annotation.Exclude;
 
 /**
@@ -55,7 +56,11 @@ public abstract class Request extends Message {
 		return headers;
 	}
 
-	public abstract HttpURLConnection buildProcessedRequest();
+	/**
+	 * Do necessary processing of request and return an opened HttpURLConnection. Returns wrapped
+	 * as a Result due to high risk of exceptions to be handled.
+	 */
+	public abstract Result<HttpURLConnection> buildProcessedRequest();
 
 	public enum Method {
 		GET,

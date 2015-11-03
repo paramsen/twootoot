@@ -16,7 +16,8 @@ android {
     }
     buildTypes {
         all {
-            buildConfigField "String", "OAUTH_CONSUMER_KEY", str(ignore.consumerKey) //Assoc. array defined in ignored.gradle
+            buildConfigField "String", "OAUTH_CONSUMER_KEY", str(ignore.consumerKey) //ignore is an associative array (map) defined in ignored.gradle, look at publicIgnore.gradle for more info
+            buildConfigField "String", "OAUTH_CONSUMER_SECRET", str(ignore.consumerSecret)
             buildConfigField "String", "OAUTH_ACCESS_TOKEN", str(ignore.accessToken)
             buildConfigField "String", "OAUTH_ACCESS_TOKEN_SECRET", str(ignore.accessTokenSecret)
             buildConfigField "String", "OAUTH_SIGNATURE_METHOD", str("HMAC-SHA1")

@@ -1,6 +1,11 @@
 package se.amsen.par.twootoot.source.twitter;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
 
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
@@ -16,10 +21,17 @@ import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
  *
  * @author params on 25/10/15
  */
-public class OAuthSource extends AbstractHttpSource<OAuthReq, OAuthResp, OAuthConfig, OAuthTokens, Void> {
+public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthConfig, OAuthTokens, Void> {
+	private static final String TAG = OAuthSource.class.getCanonicalName();
+
 	private static final String STORAGE_KEY = "OAuthSource";
 
-	private StorageSource<OAuthConfig, Result<OAuthConfig>> storage;
+	protected SharedStorageSource<OAuthTokens> storage;
+
+	public OAuthSource(Context context) {
+		super(context);
+		storage = new SharedStorageSource<>(context, STORAGE_KEY);
+	}
 
 	/**
 	 * Validate with Twitter APIs that provided accessToken is valid. If accessToken is valid
@@ -38,19 +50,19 @@ public class OAuthSource extends AbstractHttpSource<OAuthReq, OAuthResp, OAuthCo
 
 	@Override protected Result<OAuthConfig> getResult1(final OAuthTokens tokens) {
 		if(tokens == null) {
-			Result<OAuthConfig> cacheResult = storage.getByKey(STORAGE_KEY);
+			Result<OAuthTokens> fromCache = storage.getByKey(STORAGE_KEY);
 
-			if(cacheResult.isSuccess()) {
-				return validateConfig(cacheResult.asSuccess().get());
+			if(fromCache.isSuccess()) {
+				return new Success<>(new OAuthConfig(fromCache.asSuccess().get()));
 			}
 
-			return cacheResult;
+			return new Failure<>(new NullPointerException("No tokens in storage"));
 		} else {
 			OAuthConfig config = new OAuthConfig(tokens);
 			Result<OAuthConfig> result = validateConfig(config);
 
 			if(result.isSuccess()) {
-				storage.store(STORAGE_KEY, result.asSuccess().get());
+				storage.store(STORAGE_KEY, tokens);
 			}
 
 			return result;
@@ -67,6 +79,25 @@ public class OAuthSource extends AbstractHttpSource<OAuthReq, OAuthResp, OAuthCo
 			return new Success<>(config);
 		} else {
 			return new Failure<>(result.asFailure());
+		}
+	}
+
+	/**
+	 * OAuth validation doesn't care about any response data, just the resp code. Hence overriding
+	 * default Twitter response behaviour.
+	 */
+	@Override protected Result<OAuthResp> processConnection(HttpURLConnection conn, Class<OAuthResp> responseClass) {
+		try {
+			int code = conn.getResponseCode();
+
+			if(code == HttpURLConnection.HTTP_OK) {
+				return new Success<>(new OAuthResp());
+			} else {
+				return getTwitterExceptionForStatusCode(code);
+			}
+		} catch (IOException e) {
+			Log.e(TAG, "Exception getting response code", e);
+			return new Failure<>(e);
 		}
 	}
 

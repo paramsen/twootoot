@@ -1,5 +1,6 @@
 package se.amsen.par.twootoot.twitter;
 
+import android.util.Base64;
 import android.util.Pair;
 
 import java.util.Random;
@@ -13,13 +14,16 @@ import se.amsen.par.twootoot.BuildConfig;
  * @author params on 25/10/15
  */
 public class OAuthConfig extends AbstractModel {
-	public  String consumerKey;
-	public  String accessToken;
-	public  String accessSecret;
-	public  String version;
-	public  String signatureMethod;
+	public String consumerKey;
+	public String accessToken;
+	public String accessSecret;
+	public String version;
+	public String signatureMethod;
 	public String nonce;
 	public long timestamp;
+
+	public OAuthConfig() {
+	}
 
 	public OAuthConfig(OAuthTokens OAuthTokens) {
 		this(BuildConfig.OAUTH_CONSUMER_KEY, OAuthTokens.accessToken, OAuthTokens.accessSecret, BuildConfig.OAUTH_VERSION, BuildConfig.OAUTH_SIGNATURE_METHOD);
@@ -34,6 +38,16 @@ public class OAuthConfig extends AbstractModel {
 
 		this.nonce = generateNonce();
 		this.timestamp = getTimestamp();
+	}
+
+	public OAuthConfig(String consumerKey, String accessToken, String accessSecret, String version, String signatureMethod, String nonce, long timestamp) {
+		this.consumerKey = consumerKey;
+		this.accessToken = accessToken;
+		this.accessSecret = accessSecret;
+		this.version = version;
+		this.signatureMethod = signatureMethod;
+		this.nonce = nonce;
+		this.timestamp = timestamp;
 	}
 
 	public OAuthConfig prepareForRequest() {
@@ -62,15 +76,12 @@ public class OAuthConfig extends AbstractModel {
 	 * identifies a single request.
 	 */
 	private String generateNonce() {
-		String nonce = "";
+		StringBuilder builder = new StringBuilder();
+
 		byte[] nonsense = new byte[32];
 		new Random().nextBytes(nonsense);
 
-		for(byte b : nonsense) {
-			nonce.concat(String.valueOf(b));
-		}
-
-		return nonce;
+		return Base64.encodeToString(nonsense, Base64.NO_WRAP).replaceAll("[/+=]", "").toLowerCase();
 	}
 
 	public static class OAuthTokens {
