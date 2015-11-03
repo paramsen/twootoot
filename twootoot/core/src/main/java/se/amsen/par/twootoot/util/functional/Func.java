@@ -1,10 +1,10 @@
 package se.amsen.par.twootoot.util.functional;
 
-import se.amsen.par.twootoot.source.twitter.result.Result;
-
 /**
+ * Simple Function interface used for functional pattern
+ *
  * @author params on 03/11/15
  */
-public interface Func<Expected>{
-	Result<Expected> doFunc();
+public interface Func<Result>{
+	Result doFunc();
 }

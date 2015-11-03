@@ -23,7 +23,7 @@ import se.amsen.par.twootoot.util.utils.GsonUtil;
  *
  * @author params on 25/10/15
  */
-public class SharedStorageSource<Value> extends AbstractSource<Value, String, Void> {
+public class SharedStorageSource<Value> extends AbstractSource<Value, String> {
 	private static final String DELIMITER = ":";
 
 	private SharedPreferences shared;

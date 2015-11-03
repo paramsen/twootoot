@@ -42,11 +42,11 @@ public class OAuthSourceTest extends UnitTestUtil {
 	public void testTwitterIntegrationMockStorage() {
 		mockStorage();
 
-		Result<OAuthConfig> resultTwitter = source.getResult1(tokens);
+		Result<OAuthConfig> resultTwitter = source.getFunc1().doFunc(tokens);
 		assertTrue("Twitter could not validate", resultTwitter.isSuccess());
 		verify(storage, times(1)).store(anyString(), any(OAuthTokens.class));
 
-		Result<OAuthConfig> resultCache = source.getResult1(null);
+		Result<OAuthConfig> resultCache = source.getFunc1().doFunc(null);
 		assertTrue("Twitter could not validate", resultCache.isSuccess());
 		verify(storage, times(1)).getByKey(anyString());
 	}
@@ -57,11 +57,11 @@ public class OAuthSourceTest extends UnitTestUtil {
 	 * that cache is used instead of going twitter.
 	 */
 	public void testTwitterIntegration() {
-		Result<OAuthConfig> resultTwitter = source.getResult1(tokens);
+		Result<OAuthConfig> resultTwitter = source.getFunc1().doFunc(tokens);
 		assertTrue("Twitter could not validate", resultTwitter.isSuccess());
 		verify(storage, times(1)).store(anyString(), any(OAuthTokens.class));
 
-		Result<OAuthConfig> resultCache = source.getResult1(null);
+		Result<OAuthConfig> resultCache = source.getFunc1().doFunc(null);
 		assertTrue("Twitter could not validate", resultCache.isSuccess());
 		verify(storage, times(1)).getByKey(anyString());
 	}

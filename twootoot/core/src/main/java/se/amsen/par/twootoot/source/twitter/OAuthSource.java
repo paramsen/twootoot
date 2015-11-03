@@ -13,6 +13,7 @@ import se.amsen.par.twootoot.source.twitter.result.Success;
 import se.amsen.par.twootoot.twitter.OAuthConfig;
 import se.amsen.par.twootoot.twitter.OAuthConfig.OAuthTokens;
 import se.amsen.par.twootoot.util.functional.Callback;
+import se.amsen.par.twootoot.util.functional.Func1;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthReq;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
 
@@ -21,7 +22,7 @@ import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
  *
  * @author params on 25/10/15
  */
-public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthConfig, OAuthTokens, Void> {
+public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthTokens, OAuthConfig> {
 	private static final String TAG = OAuthSource.class.getName();
 
 	private static final String STORAGE_KEY = "OAuthSource";
@@ -44,32 +45,41 @@ public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthCon
 	 * @param tokens (@Nullable) accessToken from user.
 	 * @param callback Callback to be called when a Result is ready.
 	 */
-	public void authorizeAsync(@Nullable OAuthTokens tokens, Callback<OAuthConfig> callback) {
-		getResult1Async(tokens, callback);
+	public void authorizeAsync(@Nullable OAuthTokens tokens, Callback<Result<OAuthConfig>> callback) {
+		asyncGetResult1(tokens, callback);
+	}
+
+	public Result<OAuthConfig> authorizeSync(@Nullable OAuthTokens tokens) {
+		return getFunc1().doFunc(tokens);
 	}
 
 	/**
 	 * Will always instantiate a new OAuthConfig as nonce/timestamp must be unique for each request.
 	 */
-	@Override protected Result<OAuthConfig> getResult1(final OAuthTokens tokens) {
-		if(tokens == null) {
-			Result<OAuthTokens> fromCache = storage.getByKey(STORAGE_KEY);
+	@Override protected Func1<OAuthTokens, Result<OAuthConfig>> getFunc1() {
+		return new Func1<OAuthTokens, Result<OAuthConfig>>() {
+			@Override
+			public Result<OAuthConfig> doFunc(OAuthTokens tokens) {
+				if(tokens == null) {
+					Result<OAuthTokens> fromCache = storage.getByKey(STORAGE_KEY);
 
-			if(fromCache.isSuccess()) {
-				return new Success<>(new OAuthConfig(fromCache.asSuccess().get()));
+					if(fromCache.isSuccess()) {
+						return new Success<>(new OAuthConfig(fromCache.asSuccess().get()));
+					}
+
+					return new Failure<>(new NullPointerException("No tokens in storage"));
+				} else {
+					OAuthConfig config = new OAuthConfig(tokens);
+					Result<OAuthConfig> result = validateConfig(config);
+
+					if(result.isSuccess()) {
+						storage.store(STORAGE_KEY, tokens);
+					}
+
+					return result;
+				}
 			}
-
-			return new Failure<>(new NullPointerException("No tokens in storage"));
-		} else {
-			OAuthConfig config = new OAuthConfig(tokens);
-			Result<OAuthConfig> result = validateConfig(config);
-
-			if(result.isSuccess()) {
-				storage.store(STORAGE_KEY, tokens);
-			}
-
-			return result;
-		}
+		};
 	}
 
 	/**

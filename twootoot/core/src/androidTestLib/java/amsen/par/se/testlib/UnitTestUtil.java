@@ -51,7 +51,7 @@ public class UnitTestUtil extends InstrumentationTestCase {
 		}
 	}
 
-	public static class TimeoutCallback implements Callback {
+	public static class TimeoutCallback<Result1 extends Result> implements Callback<Result1> {
 		public final AtomicBoolean isFinished = new AtomicBoolean(false);
 		public final AtomicReference<Result> ref = new AtomicReference<>(null);
 		@Override

@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import amsen.par.se.testlib.UnitTestUtil;
 import amsen.par.se.testlib.twitter.Mocks;
+import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.twitter.OAuthConfig;
 
 import static org.mockito.Matchers.*;
@@ -27,7 +28,7 @@ public class TwitterHttpSourceTest extends UnitTestUtil {
 	 */
 	public void testGetResult1Async() throws InterruptedException {
 		//get through twitter
-		TimeoutCallback callback1 = new TimeoutCallback();
+		TimeoutCallback<Result<OAuthConfig>> callback1 = new TimeoutCallback<>();
 		oauth.authorizeAsync(Mocks.tokens, callback1);
 		timeout(callback1, TimeUnit.SECONDS, 10);
 
@@ -36,7 +37,7 @@ public class TwitterHttpSourceTest extends UnitTestUtil {
 		verify(oauth.storage, times(1)).store(anyString(), any(OAuthConfig.OAuthTokens.class));
 
 		//get from cache
-		TimeoutCallback callback2 = new TimeoutCallback();
+		TimeoutCallback<Result<OAuthConfig>> callback2 = new TimeoutCallback<>();
 		oauth.authorizeAsync(null, callback2);
 		timeout(callback2, TimeUnit.SECONDS, 10);
 
