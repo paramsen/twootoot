@@ -40,9 +40,24 @@ public class OAuthSourceTest extends InstrumentationTestCase {
 	 * User supplies tokens > twitter validate tokens > tokens are cached (mocked) > do more calls and verify
 	 * that cache is used instead of going twitter.
 	 */
-	public void testTwitterIntegration() {
+	public void testTwitterIntegrationMockStorage() {
 		mockStorage();
 
+		Result<OAuthConfig> resultTwitter = source.getResult1(tokens);
+		assertTrue("Twitter could not validate", resultTwitter.isSuccess());
+		verify(storage, times(1)).store(anyString(), any(OAuthTokens.class));
+
+		Result<OAuthConfig> resultCache = source.getResult1(null);
+		assertTrue("Twitter could not validate", resultCache.isSuccess());
+		verify(storage, times(1)).getByKey(anyString());
+	}
+
+	/**
+	 * Tests following flow:
+	 * User supplies tokens > twitter validate tokens > tokens are cached (mocked) > do more calls and verify
+	 * that cache is used instead of going twitter.
+	 */
+	public void testTwitterIntegration() {
 		Result<OAuthConfig> resultTwitter = source.getResult1(tokens);
 		assertTrue("Twitter could not validate", resultTwitter.isSuccess());
 		verify(storage, times(1)).store(anyString(), any(OAuthTokens.class));

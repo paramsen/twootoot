@@ -19,9 +19,13 @@ import se.amsen.par.twootoot.util.utils.GsonUtil;
  * This class stores the Class of all stored values for handling different inheritance needs when
  * deserializing.
  *
+ * Data is saved as "{{Class}}JSON" (no quotes).
+ *
  * @author params on 25/10/15
  */
 public class SharedStorageSource<Value> extends AbstractSource<Value, String, Void> {
+	private static final String DELIMITER = ":";
+
 	private SharedPreferences shared;
 
 	public SharedStorageSource(Context context, String storageId) {
@@ -29,19 +33,20 @@ public class SharedStorageSource<Value> extends AbstractSource<Value, String, Vo
 	}
 
 	public boolean store(String key, Value value) {
-		return shared.edit().putString(key, "{{" + value.getClass().getCanonicalName() + "}}" + GsonUtil.gson.toJson(value)).commit();
+		return shared.edit().putString(key, value.getClass().getName() + DELIMITER + GsonUtil.gson.toJson(value)).commit();
 	}
 
 	public Result<Value> getByKey(String key) {
 		String raw = shared.getString(key, null);
 
 		if(raw != null) {
-			String classString = raw.substring(0, raw.indexOf("}}"));
+			String classString = raw.substring(0, raw.indexOf(DELIMITER));
+			String json = raw.substring(raw.indexOf(DELIMITER) + 1);
 
 			try {
 				Class<Value> clazz = (Class<Value>) Class.forName(classString);
 
-				return new Success<>(GsonUtil.gson.fromJson(raw.substring(raw.indexOf("}}") + 2), clazz));
+				return new Success<>(GsonUtil.gson.fromJson(json, clazz));
 			} catch (ClassNotFoundException e) {
 				return new Failure<>(new GenericSourceException("No such class: " + classString));
 			} catch (JsonSyntaxException e) {
