@@ -22,7 +22,7 @@ import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
  * @author params on 25/10/15
  */
 public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthConfig, OAuthTokens, Void> {
-	private static final String TAG = OAuthSource.class.getCanonicalName();
+	private static final String TAG = OAuthSource.class.getName();
 
 	private static final String STORAGE_KEY = "OAuthSource";
 

@@ -23,7 +23,7 @@ import se.amsen.par.twootoot.webcom.Response;
  * @author params on 28/10/15
  */
 public abstract class TwitterHttpSource<Req extends Request, Resp extends Response, Result1, Param1, Param2> extends AbstractSource<Result1,  Param1, Param2> {
-	private static final String TAG = TwitterHttpSource.class.getCanonicalName();
+	private static final String TAG = TwitterHttpSource.class.getName();
 
 	private Context context;
 
