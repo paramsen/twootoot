@@ -2,7 +2,7 @@ package se.amsen.par.twootoot.webcom.twitter;
 
 import android.net.Uri;
 
-import amsen.par.se.testlib.UnitTestUtil;
+import se.amsen.par.testlib.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;

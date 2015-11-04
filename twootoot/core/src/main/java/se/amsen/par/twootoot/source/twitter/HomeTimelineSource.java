@@ -14,6 +14,7 @@ import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
 import se.amsen.par.twootoot.util.functional.Func1;
 import se.amsen.par.twootoot.util.utils.GsonUtil;
+import se.amsen.par.twootoot.webcom.twitter.exceptions.MissingOAuthConfigException;
 import se.amsen.par.twootoot.webcom.twitter.resource.HomeTimelineResource.HomeTimelineListResp;
 import se.amsen.par.twootoot.webcom.twitter.resource.HomeTimelineResource.HomeTimelineReq;
 import se.amsen.par.twootoot.webcom.twitter.resource.HomeTimelineResource.HomeTimelineResp;
@@ -50,7 +51,13 @@ public class HomeTimelineSource extends TwitterHttpSource<HomeTimelineReq, HomeT
 				OAuthConfig config = params.config;
 
 				if(config == null) {
-					config = new OAuthSource(getContext()).authorizeSync(null).asSuccess().get();
+					Result<OAuthConfig> configResult = new OAuthSource(getContext()).authorizeSync(null);
+
+					if(configResult.isSuccess()) {
+						config = configResult.asSuccess().get();
+					} else {
+						return new Failure<>(new MissingOAuthConfigException("Tried to get from cache but cache was empty"));
+					}
 				}
 
 				HomeTimelineReq req = new HomeTimelineReq(config);

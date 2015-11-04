@@ -2,8 +2,8 @@ package se.amsen.par.twootoot.source.twitter;
 
 import java.util.concurrent.TimeUnit;
 
-import amsen.par.se.testlib.UnitTestUtil;
-import amsen.par.se.testlib.twitter.Mocks;
+import se.amsen.par.testlib.testlib.UnitTestUtil;
+import se.amsen.par.testlib.testlib.twitter.Mocks;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 
@@ -33,7 +33,7 @@ public class TwitterHttpSourceTest extends UnitTestUtil {
 		timeout(callback1, TimeUnit.SECONDS, 10);
 
 		assertTrue("Did not finish before timeout", callback1.isFinished.get());
-		assertTrue("Failed to get from twitter", callback1.ref.get().isSuccess());
+		assertTrue(format("Failed to get from twitter", callback1.ref.get()), callback1.ref.get().isSuccess());
 		verify(oauth.storage, times(1)).store(anyString(), any(OAuthConfig.OAuthTokens.class));
 
 		//get from cache
@@ -42,7 +42,7 @@ public class TwitterHttpSourceTest extends UnitTestUtil {
 		timeout(callback2, TimeUnit.SECONDS, 10);
 
 		assertTrue("Did not finish before timeout", callback2.isFinished.get());
-		assertTrue("Failed to get from twitter", callback2.ref.get().isSuccess());
+		assertTrue(format("Failed to get from twitter", callback2.ref.get()), callback2.ref.get().isSuccess());
 		verify(oauth.storage, times(1)).getByKey(anyString());
 	}
 }

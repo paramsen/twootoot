@@ -1,4 +1,4 @@
-package amsen.par.se.testlib;
+package se.amsen.par.testlib.testlib;
 
 import android.content.Context;
 import android.test.InstrumentationTestCase;
@@ -66,7 +66,42 @@ public class UnitTestUtil extends InstrumentationTestCase {
 		}
 	}
 
+	/**
+	 * Requires rooted device / emulator.
+	 */
+	public boolean setInternetConnection(OnOff value) {
+		try {
+			if (value == OnOff.ON) {
+				Runtime.getRuntime().exec("\"svc wifi enable\"");
+			} else {
+				Runtime.getRuntime().exec("\"svc wifi disable\"");
+			}
+
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Format assert failure String for retrieving the message in Failure.getException.getMessage.
+	 */
+	public String format(String s, Result<?> r) {
+		return String.format(s + " [%s]", getMsg(r));
+	}
+
+	/**
+	 * Retrieve Exception message and class in Failure.
+	 */
+	public String getMsg(Result<?> result) {
+		return result.isFailure() ? String.format("Exception: %s, Message: %s", result.asFailure().get().getClass().getSimpleName(), result.asFailure().get().getMessage()) : "No Exception";
+	}
+
 	public Context getContext() {
-		return getInstrumentation().getContext();
+		return getInstrumentation().getTargetContext();
+	}
+
+	public static enum OnOff {
+		ON, OFF
 	}
 }

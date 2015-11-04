@@ -2,7 +2,7 @@ package se.amsen.par.twootoot.source.twitter;
 
 import android.util.Pair;
 
-import amsen.par.se.testlib.UnitTestUtil;
+import se.amsen.par.testlib.testlib.UnitTestUtil;
 
 /**
  * @author params on 03/11/15

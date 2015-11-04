@@ -1,11 +1,11 @@
 package se.amsen.par.twootoot.source.twitter;
 
-import amsen.par.se.testlib.UnitTestUtil;
+import se.amsen.par.testlib.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
+import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.twitter.result.Success;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
@@ -31,7 +31,8 @@ public class OAuthSourceTest extends UnitTestUtil {
 	}
 
 	public void testValidateConfig() {
-		assertTrue("Twitter could not validate", source.validateConfig(new OAuthConfig(tokens)).isSuccess());
+		Result<OAuthConfig> result = source.validateConfig(new OAuthConfig(tokens));
+		assertTrue(format("Twitter could not validate", result), result.isSuccess());
 	}
 
 	/**
@@ -43,11 +44,11 @@ public class OAuthSourceTest extends UnitTestUtil {
 		mockStorage();
 
 		Result<OAuthConfig> resultTwitter = source.getFunc1().doFunc(tokens);
-		assertTrue("Twitter could not validate", resultTwitter.isSuccess());
+		assertTrue(format("Twitter could not validate", resultTwitter), resultTwitter.isSuccess());
 		verify(storage, times(1)).store(anyString(), any(OAuthTokens.class));
 
 		Result<OAuthConfig> resultCache = source.getFunc1().doFunc(null);
-		assertTrue("Twitter could not validate", resultCache.isSuccess());
+		assertTrue(format("Twitter could not validate", resultCache), resultCache.isSuccess());
 		verify(storage, times(1)).getByKey(anyString());
 	}
 
@@ -58,11 +59,11 @@ public class OAuthSourceTest extends UnitTestUtil {
 	 */
 	public void testTwitterIntegration() {
 		Result<OAuthConfig> resultTwitter = source.getFunc1().doFunc(tokens);
-		assertTrue("Twitter could not validate", resultTwitter.isSuccess());
+		assertTrue(format("Twitter could not validate", resultTwitter), resultTwitter.isSuccess());
 		verify(storage, times(1)).store(anyString(), any(OAuthTokens.class));
 
 		Result<OAuthConfig> resultCache = source.getFunc1().doFunc(null);
-		assertTrue("Twitter could not validate", resultCache.isSuccess());
+		assertTrue(format("Twitter could not validate", resultCache), resultCache.isSuccess());
 		verify(storage, times(1)).getByKey(anyString());
 	}
 

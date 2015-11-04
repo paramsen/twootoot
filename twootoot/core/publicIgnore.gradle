@@ -7,6 +7,7 @@
 ext {
     ignore = [:]
     ignore.consumerKey = 'key'
+    ignore.consumerSecret = 'secret'
     ignore.accessToken = 'token'
     ignore.accessTokenSecret = 'secret-token'
     //... and more properties etc

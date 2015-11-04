@@ -4,18 +4,20 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.source.AbstractSource;
-import se.amsen.par.twootoot.source.GenericSourceException;
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
 import se.amsen.par.twootoot.util.utils.GsonUtil;
 import se.amsen.par.twootoot.webcom.Request;
 import se.amsen.par.twootoot.webcom.Response;
+import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exceptions.HttpStatusException;
 
 /**
  * HTTPSource is a Source that provides HTTP logic for webcom.
@@ -49,18 +51,22 @@ public abstract class TwitterHttpSource<Req extends Request, Resp extends Respon
 			int code = conn.getResponseCode();
 			String message = conn.getResponseMessage();
 
-			reader = new InputStreamReader(new BufferedInputStream(conn.getInputStream()), BuildConfig.TWITTER_CHARSET);
-			int c = -1;
+			if(code == HttpURLConnection.HTTP_OK) {
+				reader = new InputStreamReader(new BufferedInputStream(conn.getInputStream()), BuildConfig.TWITTER_CHARSET);
+				int c = -1;
 
-			while ((c = reader.read()) != -1) {
-				builder.append((char) c);
+				while ((c = reader.read()) != -1) {
+					builder.append((char) c);
+				}
+
+				return buildResponse(builder.toString(), responseClass);
+			} else {
+				return new Failure<>(new HttpStatusException("Status code is not OK (200) and responseMessage is: " + (message != null ? message : "null"), code));
 			}
-
-			return buildResponse(builder.toString(), responseClass);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			Log.e(TAG, "Exception during HTTP logic", e);
 
-			return new Failure<>(new GenericSourceException("Exception during HTTP logic", e)); //TODO create more declarative Exception
+			return new Failure<>(new NetworkException("Could not connect to Twitter", e));
 		} finally {
 			try {
 				if (conn != null) {
@@ -82,12 +88,6 @@ public abstract class TwitterHttpSource<Req extends Request, Resp extends Respon
 
 	protected Result<Resp> buildResponse(String json, Class<Resp> responseClass) {
 		return new Success<>(GsonUtil.twitterGson.fromJson(json, responseClass));
-	}
-
-	protected Failure<Resp> getTwitterExceptionForStatusCode(int code) {
-		//401 auth fail
-		//429 too many reqs
-		return null;
 	}
 
 	public Context getContext() {

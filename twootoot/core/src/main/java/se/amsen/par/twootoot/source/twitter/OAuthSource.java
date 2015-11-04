@@ -14,6 +14,8 @@ import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
 import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.util.functional.Func1;
+import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exceptions.HttpStatusException;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthReq;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
 
@@ -106,11 +108,11 @@ public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthTok
 			if(code == HttpURLConnection.HTTP_OK) {
 				return new Success<>(new OAuthResp());
 			} else {
-				return getTwitterExceptionForStatusCode(code);
+				return new Failure<>(new HttpStatusException("Wrong status code from Twitter", code));
 			}
 		} catch (IOException e) {
 			Log.e(TAG, "Exception getting response code", e);
-			return new Failure<>(e);
+			return new Failure<>(new NetworkException("Could not connect to twitter", e));
 		}
 	}
 

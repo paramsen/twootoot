@@ -1,4 +1,4 @@
-package amsen.par.se.testlib.twitter;
+package se.amsen.par.testlib.testlib.twitter;
 
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
