@@ -2,6 +2,8 @@ package se.amsen.par.twootoot.webcom.twitter.resource;
 
 import android.net.Uri;
 
+import com.google.gson.annotations.SerializedName;
+
 import se.amsen.par.twootoot.twitter.OAuthConfig;
 import se.amsen.par.twootoot.util.annotation.UrlParameter;
 import se.amsen.par.twootoot.webcom.Resource;
@@ -17,7 +19,10 @@ public class OAuthResource extends Resource {
 			super(Uri.parse("https://api.twitter.com/1.1/statuses/home_timeline.json"), Method.GET, oauth);
 		}
 
-		@UrlParameter public final int count = 1;
+		@UrlParameter @SerializedName("count")  public final int count = 1;
+		@UrlParameter @SerializedName("trim_user")  public boolean trimUser = true;
+		@UrlParameter @SerializedName("exclude_replies")  public boolean excludeReplies = true;
+		@UrlParameter @SerializedName("include_entities") public boolean includeEntities = false;
 	}
 
 	public static class OAuthResp extends Response {

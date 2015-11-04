@@ -67,15 +67,29 @@ public class TwitterRequest extends Request {
 		}
 	}
 
+	/**
+	 * _After_ signing is done, call this method to append all fields in Class hierarchy annotated
+	 * as UrlParameter. Annotation SerializedName is also used for the parameter key.
+	 *
+	 * As for now fields appended must have access modifier public.
+	 *
+	 */
 	private void appendUriParameters() {
 		Uri.Builder builder = getUri().buildUpon();
 
 		for(Field field : getClass().getFields()) {
 			if(field.getAnnotation(UrlParameter.class) != null) {
 				try {
-					builder.appendQueryParameter(field.getName(), field.get(this).toString());
+					String serializedName = field.getName();
+					SerializedName nameAnnotation = field.getAnnotation(SerializedName.class);
+
+					if(nameAnnotation != null) {
+						serializedName = nameAnnotation.value();
+					}
+
+					builder.appendQueryParameter(serializedName, field.get(this).toString());
 				} catch (Exception e) {
-					Log.e(TAG, "Could not append field", e);
+					Log.e(TAG, "Could not append field, is field public?", e);
 				}
 			}
 		}
