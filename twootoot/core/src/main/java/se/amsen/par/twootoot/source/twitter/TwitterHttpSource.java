@@ -56,7 +56,7 @@ public abstract class TwitterHttpSource<Req extends Request, Resp extends Respon
 				builder.append((char) c);
 			}
 
-			return new Success<>(GsonUtil.gson.fromJson(builder.toString(), responseClass));
+			return new Success<>(GsonUtil.twitterGson.fromJson(builder.toString(), responseClass));
 		} catch (Exception e) {
 			Log.e(TAG, "Exception during HTTP logic", e);
 

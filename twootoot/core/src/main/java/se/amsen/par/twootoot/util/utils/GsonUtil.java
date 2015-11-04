@@ -21,11 +21,11 @@ import se.amsen.par.twootoot.util.annotation.Exclude;
  * @author params on 29/10/15
  */
 public class GsonUtil {
-	public static Gson gson;
+	public static Gson twitterGson;
 
 	static {
-		gson = new GsonBuilder()
-				.setExclusionStrategies(new AnnotationExclusionStrategy())
+		twitterGson = new GsonBuilder()
+				.setExclusionStrategies(new TwitterExclusionStrategy(Exclude.class))
 				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 				.create();
 	}
@@ -69,20 +69,38 @@ public class GsonUtil {
 	 * Util for retrieving a deep copy of T for type E
 	 */
 	public static <T, E> E deepCopy(T t, Class<E> type) {
-		return gson.fromJson(gson.toJson(t), type);
+		return twitterGson.fromJson(twitterGson.toJson(t), type);
 	}
 
 	/**
 	 * ExclusionStrategy for Gson, excludes everything annotated with @Exclude, more declarative
 	 * than using transient keyword.
 	 */
-	private static class AnnotationExclusionStrategy implements ExclusionStrategy {
+	public static class TwitterExclusionStrategy implements ExclusionStrategy {
+		Class[] exclude;
+
+		public TwitterExclusionStrategy(Class... exclude) {
+			this.exclude = exclude;
+		}
+
 		public boolean shouldSkipClass(Class<?> clazz) {
-			return clazz.getAnnotation(Exclude.class) != null;
+			for(Class exclusion : exclude) {
+				if(clazz.getAnnotation(exclusion) != null) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public boolean shouldSkipField(FieldAttributes f) {
-			return f.getAnnotation(Exclude.class) != null;
+			for(Class exclusion : exclude) {
+				if(f.getAnnotation(exclusion) != null) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }

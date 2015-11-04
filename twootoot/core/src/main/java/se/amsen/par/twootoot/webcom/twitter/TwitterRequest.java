@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map.Entry;
@@ -22,6 +23,7 @@ import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
 import se.amsen.par.twootoot.twitter.OAuthConfig;
 import se.amsen.par.twootoot.util.annotation.Exclude;
+import se.amsen.par.twootoot.util.annotation.UrlParameter;
 import se.amsen.par.twootoot.util.utils.GsonUtil;
 import se.amsen.par.twootoot.webcom.Request;
 
@@ -44,6 +46,8 @@ public class TwitterRequest extends Request {
 	public Result<HttpURLConnection> buildProcessedRequest() {
 		Result<String> sign = signRequest();
 
+		appendUriParameters();
+
 		try {
 			if(sign.isSuccess()) {
 				OAuthWrapper oauth = new OAuthWrapper(this.oauth);
@@ -54,7 +58,7 @@ public class TwitterRequest extends Request {
 
 				return new Success<>(conn);
 			} else {
-				return new Failure<>(new GenericSourceException("Signing was not valid")); //TODO return signing specific ex, could be generic network err
+				return new Failure<>(new GenericSourceException("Signing was not valid (OR network err)")); //TODO return signing specific ex, could be generic network err
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Exception composing HTTP", e);
@@ -63,9 +67,25 @@ public class TwitterRequest extends Request {
 		}
 	}
 
+	private void appendUriParameters() {
+		Uri.Builder builder = getUri().buildUpon();
+
+		for(Field field : getClass().getFields()) {
+			if(field.getAnnotation(UrlParameter.class) != null) {
+				try {
+					builder.appendQueryParameter(field.getName(), field.get(this).toString());
+				} catch (Exception e) {
+					Log.e(TAG, "Could not append field", e);
+				}
+			}
+		}
+
+		setUri(builder.build());
+	}
+
 	protected String buildTwitterAuthHeader(OAuthWrapper oauth) {
 		StringBuilder builder = new StringBuilder("OAuth");
-		JsonObject json = GsonUtil.lexSort(GsonUtil.gson.toJsonTree(oauth).getAsJsonObject());
+		JsonObject json = GsonUtil.lexSort(GsonUtil.twitterGson.toJsonTree(oauth).getAsJsonObject());
 
 		for(Entry<String, JsonElement> entry : json.entrySet()) {
 			builder.append(" ")
@@ -133,8 +153,8 @@ public class TwitterRequest extends Request {
 	 * https://dev.twitter.com/oauth/overview/creating-signatures
 	 */
 	protected String processParamsAndBody() {
-		JsonObject bodyTree = GsonUtil.gson.toJsonTree(this).getAsJsonObject();
-		JsonObject oauthTree = GsonUtil.gson.toJsonTree(new OAuthWrapper(oauth)).getAsJsonObject();
+		JsonObject bodyTree = GsonUtil.twitterGson.toJsonTree(this).getAsJsonObject();
+		JsonObject oauthTree = GsonUtil.twitterGson.toJsonTree(new OAuthWrapper(oauth)).getAsJsonObject();
 		JsonObject sorted = GsonUtil.lexSort(GsonUtil.merge(bodyTree, oauthTree));
 
 		StringBuilder builder = new StringBuilder();
@@ -145,7 +165,7 @@ public class TwitterRequest extends Request {
 			}
 
 			String key = urlEncode(strip(entry.getKey()), TWITTER_CHARSET);
-			String value = urlEncode(strip(GsonUtil.gson.toJson(entry.getValue().getAsString())), TWITTER_CHARSET);
+			String value = urlEncode(strip(GsonUtil.twitterGson.toJson(entry.getValue().getAsString())), TWITTER_CHARSET);
 
 			builder.append(key).append("=").append(value);
 		}

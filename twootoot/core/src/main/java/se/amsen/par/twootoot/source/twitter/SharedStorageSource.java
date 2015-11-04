@@ -33,7 +33,7 @@ public class SharedStorageSource<Value> extends AbstractSource<Value, String> {
 	}
 
 	public boolean store(String key, Value value) {
-		return shared.edit().putString(key, value.getClass().getName() + DELIMITER + GsonUtil.gson.toJson(value)).commit();
+		return shared.edit().putString(key, value.getClass().getName() + DELIMITER + GsonUtil.twitterGson.toJson(value)).commit();
 	}
 
 	public Result<Value> getByKey(String key) {
@@ -46,7 +46,7 @@ public class SharedStorageSource<Value> extends AbstractSource<Value, String> {
 			try {
 				Class<Value> clazz = (Class<Value>) Class.forName(classString);
 
-				return new Success<>(GsonUtil.gson.fromJson(json, clazz));
+				return new Success<>(GsonUtil.twitterGson.fromJson(json, clazz));
 			} catch (ClassNotFoundException e) {
 				return new Failure<>(new GenericSourceException("No such class: " + classString));
 			} catch (JsonSyntaxException e) {

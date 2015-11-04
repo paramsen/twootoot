@@ -48,6 +48,10 @@ public abstract class Request extends Message {
 		return uri;
 	}
 
+	public void setUri(Uri uri) {
+		this.uri = uri;
+	}
+
 	public Method getMethod() {
 		return method;
 	}
