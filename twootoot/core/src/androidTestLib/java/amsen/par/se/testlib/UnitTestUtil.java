@@ -1,5 +1,6 @@
 package amsen.par.se.testlib;
 
+import android.content.Context;
 import android.test.InstrumentationTestCase;
 
 import java.util.concurrent.TimeUnit;
@@ -63,5 +64,9 @@ public class UnitTestUtil extends InstrumentationTestCase {
 				}
 			}
 		}
+	}
+
+	public Context getContext() {
+		return getInstrumentation().getContext();
 	}
 }

@@ -21,7 +21,7 @@ import se.amsen.par.twootoot.source.GenericSourceException;
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
-import se.amsen.par.twootoot.twitter.OAuthConfig;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.util.annotation.Exclude;
 import se.amsen.par.twootoot.util.annotation.UrlParameter;
 import se.amsen.par.twootoot.util.utils.GsonUtil;
@@ -86,8 +86,11 @@ public class TwitterRequest extends Request {
 					if(nameAnnotation != null) {
 						serializedName = nameAnnotation.value();
 					}
-
-					builder.appendQueryParameter(serializedName, field.get(this).toString());
+					try {
+						builder.appendQueryParameter(serializedName, field.get(this).toString());
+					} catch(NullPointerException e) {
+						continue;
+					}
 				} catch (Exception e) {
 					Log.e(TAG, "Could not append field, is field public?", e);
 				}

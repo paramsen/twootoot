@@ -56,7 +56,7 @@ public abstract class TwitterHttpSource<Req extends Request, Resp extends Respon
 				builder.append((char) c);
 			}
 
-			return new Success<>(GsonUtil.twitterGson.fromJson(builder.toString(), responseClass));
+			return buildResponse(builder.toString(), responseClass);
 		} catch (Exception e) {
 			Log.e(TAG, "Exception during HTTP logic", e);
 
@@ -78,6 +78,10 @@ public abstract class TwitterHttpSource<Req extends Request, Resp extends Respon
 				Log.e(TAG, "Exception closing reader", e);
 			}
 		}
+	}
+
+	protected Result<Resp> buildResponse(String json, Class<Resp> responseClass) {
+		return new Success<>(GsonUtil.twitterGson.fromJson(json, responseClass));
 	}
 
 	protected Failure<Resp> getTwitterExceptionForStatusCode(int code) {

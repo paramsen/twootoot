@@ -1,7 +1,7 @@
 package amsen.par.se.testlib.twitter;
 
 import se.amsen.par.twootoot.BuildConfig;
-import se.amsen.par.twootoot.twitter.OAuthConfig.OAuthTokens;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
 
 /**
  * @author params on 03/11/15

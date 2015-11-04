@@ -1,4 +1,4 @@
-package se.amsen.par.twootoot.twitter;
+package se.amsen.par.twootoot.model;
 
 import java.io.Serializable;
 

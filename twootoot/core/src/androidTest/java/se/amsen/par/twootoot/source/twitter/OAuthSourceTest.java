@@ -4,8 +4,8 @@ import amsen.par.se.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
-import se.amsen.par.twootoot.twitter.OAuthConfig;
-import se.amsen.par.twootoot.twitter.OAuthConfig.OAuthTokens;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;

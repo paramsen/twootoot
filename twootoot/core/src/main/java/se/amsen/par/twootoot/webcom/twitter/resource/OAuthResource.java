@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import com.google.gson.annotations.SerializedName;
 
-import se.amsen.par.twootoot.twitter.OAuthConfig;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.util.annotation.UrlParameter;
 import se.amsen.par.twootoot.webcom.Resource;
 import se.amsen.par.twootoot.webcom.Response;
@@ -19,10 +19,15 @@ public class OAuthResource extends Resource {
 			super(Uri.parse("https://api.twitter.com/1.1/statuses/home_timeline.json"), Method.GET, oauth);
 		}
 
-		@UrlParameter @SerializedName("count")  public final int count = 1;
-		@UrlParameter @SerializedName("trim_user")  public boolean trimUser = true;
-		@UrlParameter @SerializedName("exclude_replies")  public boolean excludeReplies = true;
-		@UrlParameter @SerializedName("include_entities") public boolean includeEntities = false;
+		/**
+		 * final UrlParameters to minimize the twitter resp as much as possible.
+		 *
+		 * TODO when adding a network framework such as Volley, just ignore response body.
+		 */
+		@UrlParameter @SerializedName("count") public final int count = 1;
+		@UrlParameter @SerializedName("trim_user")  public final boolean trimUser = true;
+		@UrlParameter @SerializedName("exclude_replies") public final boolean excludeReplies = true;
+		@UrlParameter @SerializedName("include_entities") public final boolean includeEntities = false;
 	}
 
 	public static class OAuthResp extends Response {

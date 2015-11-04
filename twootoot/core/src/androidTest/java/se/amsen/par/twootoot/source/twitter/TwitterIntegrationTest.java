@@ -1,13 +1,11 @@
 package se.amsen.par.twootoot.source.twitter;
 
 import amsen.par.se.testlib.UnitTestUtil;
-import se.amsen.par.twootoot.BuildConfig;
+import amsen.par.se.testlib.twitter.Mocks;
+import se.amsen.par.twootoot.model.twitter.HomeTimelineList;
+import se.amsen.par.twootoot.source.twitter.HomeTimelineSource.Params;
 import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.twitter.OAuthConfig;
-import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource;
-
-import static se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthReq;
-import static se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 
 /**
  * Tests Twitter integration. Placed in this package as it mainly tests TwitterHttpSource.
@@ -19,18 +17,20 @@ public class TwitterIntegrationTest extends UnitTestUtil {
 
 	@Override public void setUp() throws Exception {
 		super.setUp();
-		oauth = new OAuthSource(getInstrumentation().getContext());
+		oauth = new OAuthSource(getContext());
 		oauth.storage.invalidate();
 	}
 
 	public void testGetHomeTimeline() throws Exception {
 		//User has supplied credentials, validate them
-		OAuthConfig config = new OAuthConfig(new OAuthConfig.OAuthTokens(BuildConfig.OAUTH_ACCESS_TOKEN, BuildConfig.OAUTH_ACCESS_TOKEN_SECRET));
-		Result<OAuthResource.OAuthResp> result = oauth.performRequest(new OAuthReq(config), OAuthResp.class);
+		Result<OAuthConfig> result1 = oauth.authorizeSync(Mocks.tokens);
 
-		assertTrue("Could not perform request to twitter", result.isSuccess());
+		assertTrue("Could not perform OAuth request to twitter", result1.isSuccess());
 
 		//Use credentials to get user home timeline
-		throw new RuntimeException("Develop test");
+		HomeTimelineSource homeSrc = new HomeTimelineSource(getContext());
+		Result<HomeTimelineList> result2 = homeSrc.getSync(new Params(50, null, result1.asSuccess().get()));
+
+		assertTrue("Could not perform HomeTimeline request to twitter", result2.isSuccess());
 	}
 }

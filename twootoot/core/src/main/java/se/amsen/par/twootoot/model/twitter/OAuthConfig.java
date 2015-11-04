@@ -1,4 +1,4 @@
-package se.amsen.par.twootoot.twitter;
+package se.amsen.par.twootoot.model.twitter;
 
 import android.util.Base64;
 import android.util.Pair;
@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import se.amsen.par.twootoot.BuildConfig;
+import se.amsen.par.twootoot.model.AbstractModel;
 
 /**
  * Config for Twitter OAuth authorization

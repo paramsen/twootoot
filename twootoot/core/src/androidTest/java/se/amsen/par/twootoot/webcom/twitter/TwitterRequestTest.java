@@ -4,8 +4,8 @@ import android.net.Uri;
 
 import amsen.par.se.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
-import se.amsen.par.twootoot.twitter.OAuthConfig;
-import se.amsen.par.twootoot.twitter.OAuthConfig.OAuthTokens;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
 import se.amsen.par.twootoot.webcom.Request;
 
 /**
