@@ -11,18 +11,21 @@
         android:paddingBottom="2dp">
 
         <EditText
+            android:id="@+id/editTextToken"
             style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/Access_token"/>
 
         <EditText
+            android:id="@+id/editTextTokenSecret"
             style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/Access_token_secret"/>
 
         <Button
+            android:id="@+id/btnLogin"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

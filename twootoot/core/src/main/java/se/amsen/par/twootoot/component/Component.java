@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
+ * A Component is a View and a (Micro)Controller (in MVC). It's an encapsulation for rendering,
+ * performing and providing a set of actions. It is responsible for providing necessary callbacks
+ * and hooks. A Component encapsulates behaviour.
+ *
  * @author params on 04/11/15
  */
 public abstract class Component extends FrameLayout {

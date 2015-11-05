@@ -39,6 +39,7 @@
         android:layout_marginTop="10dp"/>
 
     <se.amsen.par.twootoot.component.twitter.LoginComponent
+        android:id="@+id/login_component"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"/>
