@@ -2,4 +2,9 @@
 <resources>
     <color name="colorPrimaryDark">#0999cd</color>
     <color name="colorPrimary">#19a8dc</color>
+    <color name="colorAccent">#f7b54f</color>
+
+    <color name="windowBackground">#efefef</color>
+    <color name="subtleGrey">#4f000000</color>
+    <color name="subtleGreyDivider">#27000000</color>
 </resources>

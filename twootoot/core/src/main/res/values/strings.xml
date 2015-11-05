@@ -3,4 +3,20 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="Access_token">Access token</string>
+    <string name="Access_token_secret">Access token secret</string>
+    <string name="Get_started">Get started</string>
+
+    <string-array name="quotes">
+        <item>Achieving excellence 140 chars at a time.</item>
+        <item>I\'m on a diet. Broadband diet.</item>
+        <item>I\'m designed according to the guidelines.</item>
+        <item>Welcome to Twitter the way it should be.</item>
+        <item>Made in Sweden.</item>
+        <item>I\'m a mix of complementary colors.</item>
+        <item>I\'m an owl.</item>
+        <item>Twootoot..? Hoothoot.</item>
+        <item>My font is Kaushan Script by Pablo Impallari.</item>
+        <item>I\'m not a hunting trophy. For real.</item>
+    </string-array>
 </resources>
