@@ -12,7 +12,7 @@ import se.amsen.par.twootoot.webcom.twitter.resource.HomeTimelineResource.HomeTi
  * @author params on 04/11/15
  */
 public class HomeTimelineList extends AbstractModel{
-	public List<HomeTimeLineTweet> tweets;
+	public List<Tweet> tweets;
 
 	public HomeTimelineList() {
 		tweets = new ArrayList<>();
@@ -22,11 +22,7 @@ public class HomeTimelineList extends AbstractModel{
 		this();
 
 		for(HomeTimelineResp raw : resp.resps) {
-			tweets.add(GsonUtil.twitterGson.fromJson(GsonUtil.twitterGson.toJson(raw), HomeTimeLineTweet.class));
+			tweets.add(GsonUtil.twitterGson.fromJson(GsonUtil.twitterGson.toJson(raw), Tweet.class));
 		}
-	}
-
-	public static class HomeTimeLineTweet {
-		public String idStr;
 	}
 }

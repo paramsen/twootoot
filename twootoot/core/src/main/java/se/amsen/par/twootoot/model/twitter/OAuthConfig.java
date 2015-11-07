@@ -1,7 +1,6 @@
 package se.amsen.par.twootoot.model.twitter;
 
 import android.util.Base64;
-import android.util.Pair;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -51,23 +50,6 @@ public class OAuthConfig extends AbstractModel {
 		this.timestamp = timestamp;
 	}
 
-	public OAuthConfig prepareForRequest() {
-		nonce = generateNonce();
-		timestamp = getTimestamp();
-
-		return this;
-	}
-
-	/**
-	 * Construct the delicately formatted 'Authorization' header following the Twitter/OAuth
-	 * protocol
-	 */
-	public Pair<String, String> buildOAuthHeader() {
-		String key = "Authorization";
-
-		return null;
-	}
-
 	private long getTimestamp() {
 		return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
 	}
@@ -77,8 +59,6 @@ public class OAuthConfig extends AbstractModel {
 	 * identifies a single request.
 	 */
 	private String generateNonce() {
-		StringBuilder builder = new StringBuilder();
-
 		byte[] nonsense = new byte[32];
 		new Random().nextBytes(nonsense);
 

@@ -24,8 +24,6 @@ public class HomeTimelineResource extends Resource {
 
 		@UrlParameter @SerializedName("count") public Integer count = 1;
 		@UrlParameter @SerializedName("since_id") public Integer sinceId = 1;
-		@UrlParameter @SerializedName("trim_user")  public Boolean trimUser = true;
-		@UrlParameter @SerializedName("exclude_replies") public Boolean excludeReplies = true;
 		@UrlParameter @SerializedName("include_entities") public Boolean includeEntities = false;
 	}
 
@@ -40,5 +38,13 @@ public class HomeTimelineResource extends Resource {
 
 	public static class HomeTimelineResp {
 		public String idStr;
+		public String text;
+		public User user;
+
+		public static class User {
+			public String name;
+			public String profileImageUrl;
+			public String screenName;
+		}
 	}
 }

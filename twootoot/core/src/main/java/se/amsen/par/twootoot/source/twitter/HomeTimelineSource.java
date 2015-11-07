@@ -7,11 +7,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import java.util.concurrent.TimeUnit;
+
 import se.amsen.par.twootoot.model.twitter.HomeTimelineList;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.util.functional.Func1;
 import se.amsen.par.twootoot.util.utils.GsonUtil;
 import se.amsen.par.twootoot.webcom.twitter.exceptions.MissingOAuthConfigException;
@@ -33,6 +36,10 @@ public class HomeTimelineSource extends TwitterHttpSource<HomeTimelineReq, HomeT
 	public HomeTimelineSource(Context context) {
 		super(context);
 		storage = new SharedStorageSource<>(context, STORAGE_KEY);
+	}
+
+	public void getAsync(Params params, Callback<Result<HomeTimelineList>> callback, @Nullable TimeUnit unit, int timeout) {
+		asyncGetResult1(params, callback,  unit, timeout);
 	}
 
 	public Result<HomeTimelineList> getSync(Params params) {
@@ -65,9 +72,12 @@ public class HomeTimelineSource extends TwitterHttpSource<HomeTimelineReq, HomeT
 				req.sinceId = params.sinceId;
 
 				Result<HomeTimelineListResp> respResult = performRequest(req, HomeTimelineListResp.class);
-				HomeTimelineListResp resp = respResult.asSuccess().get();
-
-				return new Success<>(new HomeTimelineList(resp));
+				if(respResult.isSuccess()) {
+					HomeTimelineListResp resp = respResult.asSuccess().get();
+					return new Success<>(new HomeTimelineList(resp));
+				} else {
+					return (Result) respResult.asFailure();
+				}
 			}
 		};
 	}

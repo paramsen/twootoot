@@ -1,5 +1,9 @@
 package se.amsen.par.twootoot.source;
 
+import android.support.annotation.Nullable;
+
+import java.util.concurrent.TimeUnit;
+
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
 import se.amsen.par.twootoot.util.functional.AsyncRunner;
@@ -30,20 +34,20 @@ public abstract class AbstractSource<Param1, Result1> {
 	 */
 	public abstract boolean invalidate();
 
-	public void invalidateAsync(Callback<Result<Boolean>> callback) {
-		new AsyncRunner<Void, Void, Boolean>().exec(new Func<Result<Boolean>>() {
+	public AsyncRunner invalidateAsync(Callback<Result<Boolean>> callback, @Nullable TimeUnit unit, @Nullable Integer timeout) {
+		return new AsyncRunner<Void, Boolean>().exec(new Func<Result<Boolean>>() {
 			@Override
 			public Result<Boolean> doFunc() {
 				return new Success<>(invalidate());
 			}
-		}, callback);
+		}, callback, unit, timeout);
 	}
 
 	protected Func1<Param1, Result<Result1>> getFunc1() {
 		throw new RuntimeException("Not supported");
 	}
 
-	protected void asyncGetResult1(Param1 p1, Callback<Result<Result1>> onCompleteCallback) {
-		new AsyncRunner<Param1, Void, Result1>().exec1(p1, getFunc1(), onCompleteCallback);
+	protected AsyncRunner asyncGetResult1(Param1 p1, Callback<Result<Result1>> onCompleteCallback, @Nullable TimeUnit unit, @Nullable Integer timeout) {
+		return new AsyncRunner<Param1, Result1>().exec1(p1, getFunc1(), onCompleteCallback, unit, timeout);
 	}
 }

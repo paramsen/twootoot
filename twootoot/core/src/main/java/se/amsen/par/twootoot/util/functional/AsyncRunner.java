@@ -1,89 +1,143 @@
 package se.amsen.par.twootoot.util.functional;
 
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.support.annotation.Nullable;
 import android.util.Log;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 
 /**
+ * AsyncTask runner that performs a very basic synchronization.
+ *
+ * AsyncRunner will only run ONE task at a time. If multiple tasks are started before previous is
+ * finished, the currently running task will be cancelled.
+ *
+ * AsyncRunner expose a cancel() method for cancelling the currently running task, if any.
+ *
+ * AsyncRunner now features timeouts. This provides functionality to run dangerous HTTP logic
+ * without risking that your Callback never get called.
+ *
  * @author params on 03/11/15
  */
-public class AsyncRunner<Param1, Param2, Result1> {
+public class AsyncRunner<Param1, Result1> {
 	private static final String TAG = AsyncRunner.class.getName();
+
+	/**
+	 * AtomicReference to abstract from synchronization
+	 */
+	private final AtomicReference<AsyncTask> taskRef = new AtomicReference<>();
 
 	/**
 	 * AsyncRunner.execN(params.., func, callback) is a wrapper for the AsyncTask implementing a
 	 * more functional pattern.
 	 *
+	 * @param unit Is Nullable, if no timeout is wanted, provide null as unit/timeout.
+	 *
 	 * TODO Could reuse code here
 	 */
-	public void exec(final Func<Result<Result1>> func, final Callback<Result<Result1>> callback) {
-		new AsyncTask<Void, Void, Result<Result1>>() {
-			@Override protected void onPostExecute(Result<Result1> result) {
+	public AsyncRunner exec(final Func<Result<Result1>> func, final Callback<Result<Result1>> callback, @Nullable final TimeUnit unit, @Nullable final Integer timeout) {
+		AsyncTask old = taskRef.getAndSet(new AsyncTask<Void, Void, Result<Result1>>() {
+			@Override
+			protected void onPreExecute() {
+				if(unit != null) {
+					new CountDownTimer(unit.toMillis(timeout), unit.toMillis(timeout)) {
+						public void onTick(long millisUntilFinished) {
+						}
+						public void onFinish() {
+							AsyncRunner.this.cancel();
+						}
+					}.start();
+				}
+			}
+
+			@Override
+			protected void onPostExecute(Result<Result1> result) {
 				callback.onComplete(result);
 			}
 
-			@Override protected Result<Result1> doInBackground(Void... voids) {
+			@Override
+			protected Result<Result1> doInBackground(Void... voids) {
 				try {
 					return func.doFunc();
-				} catch(Exception e) {
+				} catch (Exception e) {
 					Log.e(TAG, "Exception during func execution", e);
 
 					return new Failure<>(e);
 				}
 			}
 
-			@Override protected void onCancelled(Result<Result1> result) {
-				super.onCancelled(result);
-				callback.onComplete(result);
+			@Override
+			protected void onCancelled(Result<Result1> result) {
+				callback.onComplete(result != null ? result : new Failure<Result1>(new TimeoutException("timed out")));
 			}
-		}.execute();
+		}.execute());
+
+		if(old != null) {
+			old.cancel(true);
+		}
+
+		return this;
 	}
 
-	public void exec1(final Param1 p1, final Func1<Param1, Result<Result1>> func, final Callback<Result<Result1>> callback) {
-		new AsyncTask<Void, Void, Result<Result1>>() {
-			@Override protected void onPostExecute(Result<Result1> result) {
+	/**
+	 * See exec(...) for info
+	 */
+	public AsyncRunner exec1(final Param1 p1, final Func1<Param1, Result<Result1>> func, final Callback<Result<Result1>> callback, @Nullable final TimeUnit unit, @Nullable final Integer timeout) {
+
+		AsyncTask old = taskRef.getAndSet(new AsyncTask<Void, Void, Result<Result1>>() {
+			@Override
+			protected void onPreExecute() {
+				if(unit != null) {
+					new CountDownTimer(unit.toMillis(timeout), unit.toMillis(timeout)) {
+						public void onTick(long millisUntilFinished) {
+						}
+						public void onFinish() {
+							AsyncRunner.this.cancel();
+						}
+					}.start();
+				}
+			}
+
+			@Override
+			protected void onPostExecute(Result<Result1> result) {
 				callback.onComplete(result);
 			}
 
-			@Override protected Result<Result1> doInBackground(Void... voids) {
+			@Override
+			protected Result<Result1> doInBackground(Void... voids) {
 				try {
-					 return func.doFunc(p1);
-				} catch(Exception e) {
+					return func.doFunc(p1);
+				} catch (Exception e) {
 					Log.e(TAG, "Exception during func execution", e);
 
 					return new Failure<>(e);
 				}
 			}
 
-			@Override protected void onCancelled(Result<Result1> result) {
-				super.onCancelled(result);
-				callback.onComplete(result);
+			@Override
+			protected void onCancelled(Result<Result1> result) {
+				callback.onComplete(result != null ? result : new Failure<Result1>(new TimeoutException("timed out")));
 			}
-		}.execute();
+		}.execute());
+
+		if(old != null) {
+			old.cancel(true);
+		}
+
+		return this;
 	}
 
-	public void exec2(final Param1 p1, final Param2 p2, final Func2<Param1, Param2, Result<Result1>> func, final Callback<Result<Result1>> callback) {
-		new AsyncTask<Void, Void, Result<Result1>>() {
-			@Override protected void onPostExecute(Result<Result1> result) {
-				callback.onComplete(result);
-			}
-
-			@Override protected Result<Result1> doInBackground(Void... voids) {
-				try {
-					return func.doFunc(p1, p2);
-				} catch(Exception e) {
-					Log.e(TAG, "Exception during func execution", e);
-
-					return new Failure<>(e);
-				}
-			}
-
-			@Override protected void onCancelled(Result<Result1> result) {
-				super.onCancelled(result);
-				callback.onComplete(result);
-			}
-		}.execute();
+	/**
+	 * @return true if there was an AsyncTask && if it cancelled successfully
+	 */
+	public boolean cancel() {
+		AsyncTask old = taskRef.getAndSet(null);
+		return old != null && old.cancel(true);
 	}
 }

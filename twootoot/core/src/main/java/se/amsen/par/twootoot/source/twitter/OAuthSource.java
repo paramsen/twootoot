@@ -6,14 +6,17 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.concurrent.TimeUnit;
 
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
+import se.amsen.par.twootoot.util.functional.AsyncRunner;
 import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.util.functional.Func1;
+import se.amsen.par.twootoot.webcom.twitter.exceptions.MissingOAuthConfigException;
 import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
 import se.amsen.par.twootoot.webcom.twitter.exceptions.HttpStatusException;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthReq;
@@ -47,8 +50,8 @@ public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthTok
 	 * @param tokens (@Nullable) accessToken from user.
 	 * @param callback Callback to be called when a Result is ready.
 	 */
-	public void authorizeAsync(@Nullable OAuthTokens tokens, Callback<Result<OAuthConfig>> callback) {
-		asyncGetResult1(tokens, callback);
+	public AsyncRunner authorizeAsync(@Nullable OAuthTokens tokens, Callback<Result<OAuthConfig>> callback, @Nullable TimeUnit unit, @Nullable Integer timeout) {
+		return asyncGetResult1(tokens, callback, unit, timeout);
 	}
 
 	public Result<OAuthConfig> authorizeSync(@Nullable OAuthTokens tokens) {
@@ -69,7 +72,7 @@ public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthTok
 						return new Success<>(new OAuthConfig(fromCache.asSuccess().get()));
 					}
 
-					return new Failure<>(new NullPointerException("No tokens in storage"));
+					return new Failure<>(new MissingOAuthConfigException("No tokens in storage"));
 				} else {
 					OAuthConfig config = new OAuthConfig(tokens);
 					Result<OAuthConfig> result = validateConfig(config);
@@ -108,7 +111,7 @@ public class OAuthSource extends TwitterHttpSource<OAuthReq, OAuthResp, OAuthTok
 			if(code == HttpURLConnection.HTTP_OK) {
 				return new Success<>(new OAuthResp());
 			} else {
-				return new Failure<>(new HttpStatusException("Wrong status code from Twitter", code));
+				return new Failure<>(new HttpStatusException(String.format("Wrong status code from Twitter[%d]", code), code));
 			}
 		} catch (IOException e) {
 			Log.e(TAG, "Exception getting response code", e);

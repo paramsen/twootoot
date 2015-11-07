@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
@@ -28,20 +27,8 @@ public class QuotesComponent extends Component {
 	private String[] quotes;
 	private int iterator = 0;
 
-	public QuotesComponent(Context context) {
-		super(context);
-	}
-
 	public QuotesComponent(Context context, AttributeSet attrs) {
 		super(context, attrs);
-	}
-
-	public QuotesComponent(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
-	}
-
-	public QuotesComponent(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
 	}
 
 	@Override
@@ -102,8 +89,8 @@ public class QuotesComponent extends Component {
 		int duration = isIntro ? 300 : 150;
 		Interpolator interpolator = isIntro ? new BounceInterpolator() : new AccelerateInterpolator();
 
-		ObjectAnimator xAnim = ObjectAnimator.ofFloat(((ViewGroup)getComponentRoot().getChildAt(0)).getChildAt(pos), View.TRANSLATION_Y, startX, endX);
-		ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(((ViewGroup)getComponentRoot().getChildAt(0)).getChildAt(pos), View.ALPHA, startAlpha, endAlpha);
+		ObjectAnimator xAnim = ObjectAnimator.ofFloat(getComponentRoot().getChildAt(pos), View.TRANSLATION_Y, startX, endX);
+		ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(getComponentRoot().getChildAt(pos), View.ALPHA, startAlpha, endAlpha);
 
 		xAnim.setStartDelay(delay);
 		xAnim.setInterpolator(interpolator);
@@ -116,15 +103,15 @@ public class QuotesComponent extends Component {
 
 	public void applyWords(String[] words) {
 		for(int i = 0 ; i < words.length ; i++) {
-			TextView view = (TextView) ((ViewGroup) getComponentRoot().getChildAt(0)).getChildAt(i);
+			TextView view = (TextView) getComponentRoot().getChildAt(i);
 			view.setText(words[i]);
 			view.setVisibility(VISIBLE);
 			view.setAlpha(0);
 		}
-		int childCount = ((ViewGroup) getComponentRoot().getChildAt(0)).getChildCount();
+		int childCount = getComponentRoot().getChildCount();
 
 		for(int j = words.length ; j < childCount ; j++) {
-			TextView view = (TextView) ((ViewGroup) getComponentRoot().getChildAt(0)).getChildAt(j);
+			TextView view = (TextView) getComponentRoot().getChildAt(j);
 			view.setText("");
 			view.setVisibility(GONE);
 		}

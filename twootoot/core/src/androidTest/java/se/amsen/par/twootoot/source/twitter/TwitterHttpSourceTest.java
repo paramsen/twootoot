@@ -29,7 +29,7 @@ public class TwitterHttpSourceTest extends UnitTestUtil {
 	public void testGetResult1Async() throws InterruptedException {
 		//get through twitter
 		TimeoutCallback<Result<OAuthConfig>> callback1 = new TimeoutCallback<>();
-		oauth.authorizeAsync(Mocks.tokens, callback1);
+		oauth.authorizeAsync(Mocks.tokens, callback1, null, 0);
 		timeout(callback1, TimeUnit.SECONDS, 10);
 
 		assertTrue("Did not finish before timeout", callback1.isFinished.get());
@@ -38,7 +38,7 @@ public class TwitterHttpSourceTest extends UnitTestUtil {
 
 		//get from cache
 		TimeoutCallback<Result<OAuthConfig>> callback2 = new TimeoutCallback<>();
-		oauth.authorizeAsync(null, callback2);
+		oauth.authorizeAsync(null, callback2, null, null);
 		timeout(callback2, TimeUnit.SECONDS, 10);
 
 		assertTrue("Did not finish before timeout", callback2.isFinished.get());

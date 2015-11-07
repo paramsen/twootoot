@@ -5,6 +5,9 @@
     <color name="colorAccent">#f7b54f</color>
 
     <color name="windowBackground">#efefef</color>
+    <color name="textDark">#cf010f1a</color>
+    <color name="textLightBlue">#88021a30</color>
     <color name="subtleGrey">#4f000000</color>
     <color name="subtleGreyDivider">#27000000</color>
+    <color name="subtlerGreyDivider">#0f000000</color>
 </resources>

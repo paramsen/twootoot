@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+    <ImageView
+        android:id="@+id/profilePicture"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/icon"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"/>
+
+    <TextView
+        style="@style/TextAppearance.Tweet"
+        android:id="@+id/userDisplayName"
+        android:layout_toRightOf="@id/profilePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="tmp"
+        android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"/>
+
+    <TextView
+        style="@style/TextAppearance.Tweet"
+        android:id="@+id/userName"
+        android:textColor="@color/textLightBlue"
+        android:layout_toRightOf="@+id/userDisplayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="\@AndroidDev"/>
+
+
+    <TextView
+        style="@style/TextAppearance.Tweet"
+        android:id="@+id/content"
+        android:layout_toRightOf="@id/profilePicture"
+        android:layout_below="@+id/userDisplayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="Lorem ipsum dolor sit amet, lorum ipsum dolor sit amet. Dolor sit amet lorum."/>
+    </RelativeLayout>
+
+    <View style="@style/Divider.Light" android:layout_marginTop="8dp"/>
+</LinearLayout>
