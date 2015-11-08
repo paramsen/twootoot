@@ -1,5 +1,6 @@
 # twootoot [Android]
 _Acheiving Twitter excellence 140 chars at a time._
+
 _[a pretty techy twitter client in Android]_
 
 ![Demo animation](https://raw.githubusercontent.com/paramsen/twootoot/master/preview.gif)
@@ -21,4 +22,4 @@ Why no frameworks? Well just to show some good'ol Java knowledge.
 * Portrait
   * Swipe retweet/answer
 * Landscape
-  * Buttons for retweet/answer
+  * Swipe retweet/answer
