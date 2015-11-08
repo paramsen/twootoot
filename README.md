@@ -1,8 +1,6 @@
 # twootoot [Android]
 _Acheiving Twitter excellence 140 chars at a time._
-
-## Breakdown
-_[a MVC twitter client in Android]_
+_[a pretty techy twitter client in Android]_
 
 ![Demo animation](https://raw.githubusercontent.com/paramsen/twootoot/master/preview.gif)
 
