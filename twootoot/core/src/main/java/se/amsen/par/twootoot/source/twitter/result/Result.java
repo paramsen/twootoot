@@ -20,6 +20,13 @@ public abstract class Result<T> {
 		return this instanceof Success && asSuccess().get() != null;
 	}
 
+	/**
+	 * Do
+	 */
+	public boolean isSuccessIgnoreValue() {
+		return this instanceof Success;
+	}
+
 	public boolean isFailure() {
 		return this instanceof Failure && asFailure().get() != null;
 	}

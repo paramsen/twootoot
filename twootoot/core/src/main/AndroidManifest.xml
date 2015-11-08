@@ -21,6 +21,11 @@
 
         <activity android:name=".activity.twitter.HomeActivity"
             android:label="@string/app_name"/>
+
+        <activity android:name=".activity.twitter.TweetActivity"
+                  android:theme="@style/Twootoot.Login"
+                  android:label="@string/app_name"
+                  android:windowSoftInputMode="stateVisible|adjustResize"/>
     </application>
 
 </manifest>

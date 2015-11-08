@@ -2,8 +2,10 @@ package se.amsen.par.twootoot.component.twitter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
@@ -15,12 +17,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import se.amsen.par.twootoot.R;
+import se.amsen.par.twootoot.behavior.NetworkExceptionBehavior;
 import se.amsen.par.twootoot.component.Component;
 import se.amsen.par.twootoot.component.behavior.WaitBehavior;
 import se.amsen.par.twootoot.model.Event;
+import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.Tweet;
+import se.amsen.par.twootoot.source.twitter.FireAndForgetSource;
+import se.amsen.par.twootoot.source.twitter.OAuthSource;
+import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.util.functional.Callback;
+import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.resource.RetweetResource;
 
 /**
  * TweetList component managing a RecyclerView.
@@ -32,6 +44,8 @@ import se.amsen.par.twootoot.model.twitter.Tweet;
 public class TweetListComponent extends Component implements WaitBehavior<List<Tweet>> {
 	private List<Tweet> tweets;
 	private RecyclerView tweetList;
+	private SwipeRefreshLayout refreshLayout;
+	@Nullable private Parcelable restoredInstanceState;
 
 	public TweetListComponent(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -40,20 +54,44 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 	@Override
 	public void onCreate() {
 		render(R.layout.component_tweet_list);
-
 		setLoaderVisibility(VISIBLE);
 		getComponentRoot().setVisibility(GONE);
+		initRefreshLayout();
+	}
+
+	private void initRefreshLayout() {
+		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
+		refreshLayout.setEnabled(false);
+		refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccentDark, R.color.colorPrimaryDark, R.color.colorAccent);
+		refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				TweetListComponent.this.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						Snackbar.make(TweetListComponent.this, "Updating timeline not yet implemented", Snackbar.LENGTH_SHORT).show();
+						refreshLayout.setRefreshing(false);
+					}
+				}, TimeUnit.SECONDS.toMillis(3));
+			}
+		});
 	}
 
 	@Override
 	public void onReady(Event<List<Tweet>> event) {
 		tweets = event.getValue();
 
+		initRecyclerView();
+		initAnimation();
+	}
+
+	private void initRecyclerView() {
 		setLoaderVisibility(GONE);
 
 		tweetList = (RecyclerView) findViewById(R.id.recyclerTweetList);
-		tweetList.setLayoutManager(new LinearLayoutManager(getActivity()));
 		tweetList.setAdapter(new TweetAdapter());
+
+		tweetList.getLayoutManager().onRestoreInstanceState(restoredInstanceState);
 
 		ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 			@Override
@@ -62,20 +100,71 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 			}
 
 			@Override
-			public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-				Snackbar.make(getComponentRoot(), "Retweet", Snackbar.LENGTH_SHORT).show();
+			public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+				onRetweet(viewHolder);
 			}
 
+			@Override
+			public float getSwipeThreshold(RecyclerView.ViewHolder viewHolder) {
+				return .99f;
+			}
 
+			@Override
+			public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+			}
 		};
 
 		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 		itemTouchHelper.attachToRecyclerView(tweetList);
-		initAnimation();
+
 	}
 
 	public RecyclerView.Adapter getDataSetAdapter() {
 		return tweetList.getAdapter();
+	}
+
+	private void onRetweet(final RecyclerView.ViewHolder viewHolder) {
+		new OAuthSource(getActivity()).authorizeAsync(null, new Callback<Result<OAuthConfig>>() {
+			@Override
+			public void onComplete(Result<OAuthConfig> result) {
+				if (result.isSuccess()) {
+					OAuthConfig config = result.asSuccess().get();
+					RetweetResource.RetweetRequest req = new RetweetResource.RetweetRequest(config, tweets.get(viewHolder.getAdapterPosition()).idStr);
+
+					new FireAndForgetSource<>(getActivity(), req, RetweetResource.RetweetResponse.class, config).fire(new Callback<Result<Void>>() {
+						@Override
+						public void onComplete(Result<Void> result) {
+							if (result.isSuccessIgnoreValue()) {
+								Snackbar.make(getComponentRoot(), "Retweeted", Snackbar.LENGTH_LONG).show();
+								getDataSetAdapter().notifyItemChanged(viewHolder.getLayoutPosition());
+							} else if(result.asFailure().get() instanceof TimeoutException || result.asFailure().get() instanceof NetworkException) {
+								NetworkExceptionBehavior.showSnackbar(getActivity(), new View.OnClickListener() {
+									@Override
+									public void onClick(View v) {
+										onRetweet(viewHolder);
+									}
+								});
+							} else {
+								onRetweetError(viewHolder);
+							}
+						}
+					}, TimeUnit.SECONDS, 30);
+				} else {
+					onRetweetError(viewHolder);
+				}
+			}
+		}, TimeUnit.SECONDS, 30);
+	}
+
+	private void onRetweetError(final RecyclerView.ViewHolder viewHolder) {
+		Snackbar.make(getComponentRoot(), "Could not retweet", Snackbar.LENGTH_INDEFINITE)
+				.setAction("Retry", new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onRetweet(viewHolder);
+					}
+				})
+				.show();
 	}
 
 	private void initAnimation() {
@@ -87,6 +176,10 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 		anim.setStartDelay(getResources().getInteger(android.R.integer.config_shortAnimTime));
 
 		anim.start();
+	}
+
+	public void swipeRefreshEnabled(boolean bool) {
+		refreshLayout.setEnabled(bool);
 	}
 
 	private class TweetAdapter extends RecyclerView.Adapter<TweetHolder> {
@@ -111,6 +204,7 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 		private TextView userDisplayName;
 		private TextView userName;
 		private TextView content;
+		private boolean hasTransitioned;
 
 		private Tweet tweet;
 
@@ -126,7 +220,16 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 			this.tweet = tweet;
 
 			if(tweet.user.profileImageDrawable != null) {
+				if(!hasTransitioned) {
+					profilePicture.setAlpha(0f);
+					profilePicture.animate().alphaBy(1f).start();
+					hasTransitioned = true;
+				}
+
+				profilePicture.setVisibility(VISIBLE);
 				profilePicture.setImageDrawable(tweet.user.profileImageDrawable);
+			} else {
+				profilePicture.setVisibility(INVISIBLE);
 			}
 
 			userDisplayName.setText(tweet.user.name);
@@ -135,5 +238,13 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 
 
 		}
+	}
+
+	public void setRestoredInstanceState(Parcelable restoredInstanceState) {
+		this.restoredInstanceState = restoredInstanceState;
+	}
+
+	public RecyclerView getRecyclerView() {
+		return tweetList;
 	}
 }

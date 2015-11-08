@@ -25,7 +25,7 @@ import se.amsen.par.twootoot.component.Component;
  */
 public class QuotesComponent extends Component {
 	private String[] quotes;
-	private int iterator = 0;
+	private int iterator = 1;
 
 	public QuotesComponent(Context context, AttributeSet attrs) {
 		super(context, attrs);

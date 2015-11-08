@@ -3,6 +3,7 @@ package se.amsen.par.twootoot.source.twitter;
 import android.util.Pair;
 
 import se.amsen.par.testlib.testlib.UnitTestUtil;
+import se.amsen.par.twootoot.source.SharedStorageSource;
 
 /**
  * @author params on 03/11/15

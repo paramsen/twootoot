@@ -32,9 +32,9 @@ public abstract class Request extends Message {
 		this.headers.addAll(headers);
 	}
 
-	public String urlEncode(String data, String charset) {
+	public static String urlEncode(String data, String charset) {
 		try {
-			return URLEncoder.encode(data, charset);
+			return URLEncoder.encode(data, charset).replace("+", "%20"); //URLEncoder replace spaces with + - twitter no like
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(String.format("Failed to URL encode String [%s] using charset [%s]", data, charset), e);
 		}

@@ -43,12 +43,15 @@ public class AsyncRunner<Param1, Result1> {
 	 */
 	public AsyncRunner exec(final Func<Result<Result1>> func, final Callback<Result<Result1>> callback, @Nullable final TimeUnit unit, @Nullable final Integer timeout) {
 		AsyncTask old = taskRef.getAndSet(new AsyncTask<Void, Void, Result<Result1>>() {
+			CountDownTimer timer;
+
 			@Override
 			protected void onPreExecute() {
 				if(unit != null) {
-					new CountDownTimer(unit.toMillis(timeout), unit.toMillis(timeout)) {
+					timer = new CountDownTimer(unit.toMillis(timeout), unit.toMillis(timeout)) {
 						public void onTick(long millisUntilFinished) {
 						}
+
 						public void onFinish() {
 							AsyncRunner.this.cancel();
 						}
@@ -59,6 +62,11 @@ public class AsyncRunner<Param1, Result1> {
 			@Override
 			protected void onPostExecute(Result<Result1> result) {
 				callback.onComplete(result);
+				taskRef.set(null);
+
+				if(unit != null) {
+					timer.cancel();
+				}
 			}
 
 			@Override
@@ -91,12 +99,15 @@ public class AsyncRunner<Param1, Result1> {
 	public AsyncRunner exec1(final Param1 p1, final Func1<Param1, Result<Result1>> func, final Callback<Result<Result1>> callback, @Nullable final TimeUnit unit, @Nullable final Integer timeout) {
 
 		AsyncTask old = taskRef.getAndSet(new AsyncTask<Void, Void, Result<Result1>>() {
+			CountDownTimer timer;
+
 			@Override
 			protected void onPreExecute() {
 				if(unit != null) {
-					new CountDownTimer(unit.toMillis(timeout), unit.toMillis(timeout)) {
+					timer = new CountDownTimer(unit.toMillis(timeout), unit.toMillis(timeout)) {
 						public void onTick(long millisUntilFinished) {
 						}
+
 						public void onFinish() {
 							AsyncRunner.this.cancel();
 						}
@@ -107,6 +118,10 @@ public class AsyncRunner<Param1, Result1> {
 			@Override
 			protected void onPostExecute(Result<Result1> result) {
 				callback.onComplete(result);
+				taskRef.set(null);
+				if(unit != null) {
+					timer.cancel();
+				}
 			}
 
 			@Override

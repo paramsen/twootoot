@@ -6,6 +6,9 @@
     <string name="Access_token">Access token</string>
     <string name="Access_token_secret">Access token secret</string>
     <string name="Get_started">Get started</string>
+    <string name="Tweet">Tweet</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Whats_on_your_mind">Whats on your mind?</string>
 
     <string-array name="quotes">
         <item>Achieving excellence 140 chars at a time.</item>

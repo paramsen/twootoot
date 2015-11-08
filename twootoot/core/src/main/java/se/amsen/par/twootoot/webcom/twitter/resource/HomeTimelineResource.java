@@ -22,6 +22,14 @@ public class HomeTimelineResource extends Resource {
 			super(Uri.parse("https://api.twitter.com/1.1/statuses/home_timeline.json"), Method.GET, oauth);
 		}
 
+		public HomeTimelineReq(OAuthConfig oauth, Integer count, Integer sinceId, Boolean includeEntities) {
+			this(oauth);
+
+			this.count = count;
+			this.sinceId = sinceId;
+			this.includeEntities = includeEntities;
+		}
+
 		@UrlParameter @SerializedName("count") public Integer count = 1;
 		@UrlParameter @SerializedName("since_id") public Integer sinceId = 1;
 		@UrlParameter @SerializedName("include_entities") public Boolean includeEntities = false;
@@ -41,10 +49,11 @@ public class HomeTimelineResource extends Resource {
 		public String text;
 		public User user;
 
-		public static class User {
+	}
+
+	public static class User {
 			public String name;
 			public String profileImageUrl;
 			public String screenName;
-		}
 	}
 }

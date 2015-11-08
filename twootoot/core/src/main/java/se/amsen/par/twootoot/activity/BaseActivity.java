@@ -1,5 +1,6 @@
 package se.amsen.par.twootoot.activity;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -27,5 +28,13 @@ public class BaseActivity extends AppCompatActivity {
 				callback.onComplete(result.isSuccess() && result.asSuccess().get());
 			}
 		}, TimeUnit.SECONDS, 30);
+	}
+
+	/**
+	 * Post on current Thread. Due to scoping current Thread == Main Thread so touching GUI in Runnable
+	 * is ok
+	 */
+	protected void postDelayed(Runnable run, TimeUnit unit, int delay) {
+		new Handler().postDelayed(run, unit.toMillis(delay));
 	}
 }

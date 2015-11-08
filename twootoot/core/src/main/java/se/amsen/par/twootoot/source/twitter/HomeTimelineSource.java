@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import se.amsen.par.twootoot.model.twitter.HomeTimelineList;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
+import se.amsen.par.twootoot.source.SharedStorageSource;
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
@@ -55,6 +56,12 @@ public class HomeTimelineSource extends TwitterHttpSource<HomeTimelineReq, HomeT
 		return new Func1<Params, Result<HomeTimelineList>>() {
 			@Override
 			public Result<HomeTimelineList> doFunc(Params params) {
+				Result<HomeTimelineList> cached = storage.getByKey(STORAGE_KEY);
+
+				if(cached.isSuccess()) {
+					return cached.asSuccess();
+				}
+
 				OAuthConfig config = params.config;
 
 				if(config == null) {
@@ -67,14 +74,14 @@ public class HomeTimelineSource extends TwitterHttpSource<HomeTimelineReq, HomeT
 					}
 				}
 
-				HomeTimelineReq req = new HomeTimelineReq(config);
-				req.count = params.count;
-				req.sinceId = params.sinceId;
+				HomeTimelineReq req = new HomeTimelineReq(config, params.count, params.sinceId, false);
 
 				Result<HomeTimelineListResp> respResult = performRequest(req, HomeTimelineListResp.class);
 				if(respResult.isSuccess()) {
-					HomeTimelineListResp resp = respResult.asSuccess().get();
-					return new Success<>(new HomeTimelineList(resp));
+					HomeTimelineList list = new HomeTimelineList(respResult.asSuccess().get());
+					storage.store(STORAGE_KEY, list);
+
+					return new Success<>(list);
 				} else {
 					return (Result) respResult.asFailure();
 				}

@@ -56,6 +56,10 @@ public class TwitterRequest extends Request {
 				conn.setRequestProperty("Authorization", buildTwitterAuthHeader(oauth));
 				conn.setRequestMethod(getMethod().name());
 
+				if(getMethod() == Method.POST) {
+					conn.setDoOutput(true);
+				}
+
 				return new Success<>(conn);
 			} else {
 				return new Failure<>(new GenericSourceException("Signing was not valid (OR network err)")); //TODO return signing specific ex, could be generic network err
@@ -182,7 +186,7 @@ public class TwitterRequest extends Request {
 			}
 
 			String key = urlEncode(strip(entry.getKey()), TWITTER_CHARSET);
-			String value = urlEncode(strip(GsonUtil.twitterGson.toJson(entry.getValue().getAsString())), TWITTER_CHARSET);
+			String value = urlEncode(strip(entry.getValue().getAsString()), TWITTER_CHARSET);
 
 			builder.append(key).append("=").append(value);
 		}

@@ -32,7 +32,9 @@ public abstract class AbstractSource<Param1, Result1> {
 	 *
 	 * @return true if invalidation was successful
 	 */
-	public abstract boolean invalidate();
+	public boolean invalidate() {
+		throw new RuntimeException("Not supported");
+	}
 
 	public AsyncRunner invalidateAsync(Callback<Result<Boolean>> callback, @Nullable TimeUnit unit, @Nullable Integer timeout) {
 		return new AsyncRunner<Void, Boolean>().exec(new Func<Result<Boolean>>() {

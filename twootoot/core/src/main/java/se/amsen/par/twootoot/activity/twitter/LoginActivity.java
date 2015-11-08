@@ -40,6 +40,7 @@ public class LoginActivity extends BaseActivity {
 						public void onComplete(Result<OAuthConfig> result) {
 							if (result.isSuccess()) {
 								startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+								finish();
 							} else {
 								if (result.asFailure().get() instanceof MissingOAuthConfigException) {
 									login.onReady(null);

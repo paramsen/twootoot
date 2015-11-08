@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/windowBackground"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <EditText
+        style="@style/Widget.AppCompat.EditText"
+        android:id="@+id/tweet"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top|start"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/Whats_on_your_mind"/>
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/charsLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/textLightBlue"
+            android:text="140"
+            android:layout_marginLeft="4dp"/>
+        <View android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"/>
+        <Button
+            android:id="@+id/negative"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Cancel"
+            android:onClick="onNegative"/>
+
+        <Button
+            android:id="@+id/positive"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Tweet"
+            android:onClick="onPositive"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

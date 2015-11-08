@@ -4,6 +4,7 @@ import se.amsen.par.testlib.testlib.UnitTestUtil;
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
+import se.amsen.par.twootoot.source.SharedStorageSource;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
 

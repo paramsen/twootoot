@@ -3,17 +3,20 @@ package se.amsen.par.twootoot.component.twitter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.R;
+import se.amsen.par.twootoot.activity.twitter.HomeActivity;
 import se.amsen.par.twootoot.behavior.NetworkExceptionBehavior;
 import se.amsen.par.twootoot.component.Component;
 import se.amsen.par.twootoot.component.behavior.WaitBehavior;
@@ -29,11 +32,9 @@ import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
  */
 public class LoginComponent extends Component implements WaitBehavior<Void> {
 	private OAuthSource oauth;
+	private EditText token;
+	private EditText secret;
 
-	/**
-	 * Expose other constructors if instantiation through other than default Android XML inflation
-	 * needed.
-	 */
 	public LoginComponent(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -47,6 +48,8 @@ public class LoginComponent extends Component implements WaitBehavior<Void> {
 		getComponentRoot().setVisibility(GONE);
 		setLoaderVisibility(VISIBLE);
 
+		token = (EditText) findViewById(R.id.editTextToken);
+		secret = (EditText) findViewById(R.id.editTextTokenSecret);
 		findViewById(R.id.btnLogin).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -75,7 +78,11 @@ public class LoginComponent extends Component implements WaitBehavior<Void> {
 	}
 
 	public void authorize() {
-		oauth.authorizeAsync(new OAuthConfig.OAuthTokens(BuildConfig.OAUTH_ACCESS_TOKEN, BuildConfig.OAUTH_ACCESS_TOKEN_SECRET), getAuthorizeCallback(), TimeUnit.SECONDS, 30);
+		if(token.getText().toString().equalsIgnoreCase("token") && secret.getText().toString().equalsIgnoreCase("secret")) {
+			oauth.authorizeAsync(new OAuthConfig.OAuthTokens(BuildConfig.OAUTH_ACCESS_TOKEN, BuildConfig.OAUTH_ACCESS_TOKEN_SECRET), getAuthorizeCallback(), TimeUnit.SECONDS, 30);
+		} else {
+			onFailedAuth();
+		}
 	}
 
 	public Callback<Result<OAuthConfig>> getAuthorizeCallback() {
@@ -83,7 +90,8 @@ public class LoginComponent extends Component implements WaitBehavior<Void> {
 			@Override
 			public void onComplete(Result<OAuthConfig> result) {
 				if(result.isSuccess()) {
-					//TODO open next
+					getActivity().startActivity(new Intent(getActivity(), HomeActivity.class));
+					getActivity().finish();
 				} else {
 					if(result.asFailure().get() instanceof TimeoutException || result.asFailure().get() instanceof NetworkException) {
 						NetworkExceptionBehavior.showSnackbar(getActivity(), new OnClickListener() {
@@ -93,10 +101,14 @@ public class LoginComponent extends Component implements WaitBehavior<Void> {
 							}
 						});
 					} else {
-						Snackbar.make(getRootView(), "Incorrect token or secret", Snackbar.LENGTH_SHORT);
+						onFailedAuth();
 					}
 				}
 			}
 		};
+	}
+
+	private void onFailedAuth() {
+		Snackbar.make(getRootView(), "Incorrect token or secret", Snackbar.LENGTH_SHORT).show();
 	}
 }

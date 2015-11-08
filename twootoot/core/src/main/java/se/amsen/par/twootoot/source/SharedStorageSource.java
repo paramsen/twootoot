@@ -1,12 +1,10 @@
-package se.amsen.par.twootoot.source.twitter;
+package se.amsen.par.twootoot.source;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.JsonSyntaxException;
 
-import se.amsen.par.twootoot.source.AbstractSource;
-import se.amsen.par.twootoot.source.GenericSourceException;
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;

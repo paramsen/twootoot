@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 
+import se.amsen.par.twootoot.source.SharedStorageSource;
 import se.amsen.par.twootoot.source.twitter.result.Failure;
 import se.amsen.par.twootoot.source.twitter.result.Result;
 import se.amsen.par.twootoot.source.twitter.result.Success;
