@@ -2,9 +2,9 @@
 _Acheiving Twitter excellence 140 chars at a time._
 
 _[a pretty techy twitter client in Android]_
-
+<p align="center">
 ![Demo animation](https://raw.githubusercontent.com/paramsen/twootoot/master/preview.gif)
-
+</p>
 ### Info
 This project is aimed at achieving a basic twitter integration complete with some basic user interaction listed below using no frameworks.
 Why no frameworks? Well just to show some good'ol Java knowledge.
