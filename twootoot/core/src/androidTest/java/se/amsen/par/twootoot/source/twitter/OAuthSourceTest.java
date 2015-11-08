@@ -5,8 +5,8 @@ import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
 import se.amsen.par.twootoot.source.SharedStorageSource;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;

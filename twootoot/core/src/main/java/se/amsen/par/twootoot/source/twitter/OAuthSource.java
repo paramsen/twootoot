@@ -9,17 +9,17 @@ import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 
 import se.amsen.par.twootoot.source.SharedStorageSource;
-import se.amsen.par.twootoot.source.twitter.result.Failure;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.result.Failure;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig.OAuthTokens;
 import se.amsen.par.twootoot.util.functional.AsyncRunner;
 import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.util.functional.Func1;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.MissingOAuthConfigException;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.HttpStatusException;
+import se.amsen.par.twootoot.webcom.twitter.exception.MissingOAuthConfigException;
+import se.amsen.par.twootoot.webcom.twitter.exception.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exception.HttpStatusException;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthReq;
 import se.amsen.par.twootoot.webcom.twitter.resource.OAuthResource.OAuthResp;
 

@@ -1,4 +1,4 @@
-package se.amsen.par.twootoot.behavior;
+package se.amsen.par.twootoot.behavior.exception;
 
 import android.app.Activity;
 import android.support.design.widget.Snackbar;
@@ -6,11 +6,13 @@ import android.view.View;
 
 import java.util.concurrent.TimeoutException;
 
-import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.result.Result;
 import se.amsen.par.twootoot.util.functional.Callback;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exception.NetworkException;
 
 /**
+ * Behavior for handling NetworkErrorException
+ *
  * @author params on 06/11/15
  */
 public class NetworkExceptionBehavior {

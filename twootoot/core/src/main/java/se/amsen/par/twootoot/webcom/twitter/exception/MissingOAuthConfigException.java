@@ -1,6 +1,8 @@
-package se.amsen.par.twootoot.webcom.twitter.exceptions;
+package se.amsen.par.twootoot.webcom.twitter.exception;
 
 /**
+ * Exception for when there is no valid OAuthConfig to be retrieved.
+ *
  * @author params on 04/11/15
  */
 public class MissingOAuthConfigException extends Exception {

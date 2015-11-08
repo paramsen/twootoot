@@ -13,16 +13,18 @@ import java.util.concurrent.TimeoutException;
 
 import se.amsen.par.twootoot.R;
 import se.amsen.par.twootoot.activity.BaseActivity;
-import se.amsen.par.twootoot.behavior.NetworkExceptionBehavior;
+import se.amsen.par.twootoot.behavior.exception.NetworkExceptionBehavior;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.source.twitter.FireAndForgetSource;
 import se.amsen.par.twootoot.source.twitter.OAuthSource;
-import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.result.Result;
 import se.amsen.par.twootoot.util.functional.Callback;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exception.NetworkException;
 import se.amsen.par.twootoot.webcom.twitter.resource.StatusUpdateResource;
 
 /**
+ * Activity for writing or answering tweets
+ *
  * @author params on 07/11/15
  */
 public class TweetActivity extends BaseActivity {

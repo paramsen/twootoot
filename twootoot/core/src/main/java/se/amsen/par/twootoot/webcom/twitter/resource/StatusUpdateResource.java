@@ -3,6 +3,7 @@ package se.amsen.par.twootoot.webcom.twitter.resource;
 import android.net.Uri;
 
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
+import se.amsen.par.twootoot.util.annotation.Required;
 import se.amsen.par.twootoot.util.annotation.UrlParameter;
 import se.amsen.par.twootoot.webcom.Resource;
 import se.amsen.par.twootoot.webcom.Response;
@@ -19,7 +20,7 @@ public class StatusUpdateResource extends Resource {
 			this.status = status;
 		}
 
-		@UrlParameter public String status;
+		@Required @UrlParameter public String status;
 	}
 
 	public static class StatusUpdateResponse extends Response {

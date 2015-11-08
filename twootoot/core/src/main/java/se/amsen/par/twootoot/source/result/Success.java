@@ -1,4 +1,4 @@
-package se.amsen.par.twootoot.source.twitter.result;
+package se.amsen.par.twootoot.source.result;
 
 /**
  * Generic Success wrapper

@@ -4,8 +4,8 @@ import android.support.annotation.Nullable;
 
 import java.util.concurrent.TimeUnit;
 
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 import se.amsen.par.twootoot.util.functional.AsyncRunner;
 import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.util.functional.Func;

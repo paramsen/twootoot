@@ -1,6 +1,8 @@
-package se.amsen.par.twootoot.webcom.twitter.exceptions;
+package se.amsen.par.twootoot.webcom.twitter.exception;
 
 /**
+ * Exception for common Twitter error codes.
+ *
  * @author params on 04/11/15
  */
 public class HttpStatusException extends Exception {

@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import se.amsen.par.twootoot.source.twitter.result.Failure;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.result.Failure;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 import se.amsen.par.twootoot.util.functional.AsyncRunner;
 import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.util.functional.Func1;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exception.NetworkException;
 
 /**
  * @author params on 07/11/15

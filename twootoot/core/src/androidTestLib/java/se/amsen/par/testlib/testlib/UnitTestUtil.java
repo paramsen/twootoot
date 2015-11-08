@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.result.Result;
 import se.amsen.par.twootoot.util.functional.Callback;
 
 /**

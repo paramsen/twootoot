@@ -1,4 +1,4 @@
-package se.amsen.par.twootoot.source;
+package se.amsen.par.twootoot.source.exception;
 
 /**
  * @author params on 25/10/15

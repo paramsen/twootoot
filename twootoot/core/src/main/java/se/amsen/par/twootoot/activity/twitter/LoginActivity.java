@@ -7,11 +7,14 @@ import java.util.concurrent.TimeUnit;
 
 import se.amsen.par.twootoot.R;
 import se.amsen.par.twootoot.activity.BaseActivity;
-import se.amsen.par.twootoot.behavior.NetworkExceptionBehavior;
+import se.amsen.par.twootoot.behavior.exception.NetworkExceptionBehavior;
 import se.amsen.par.twootoot.component.twitter.LoginComponent;
 import se.amsen.par.twootoot.source.twitter.OAuthSource;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.MissingOAuthConfigException;
+import se.amsen.par.twootoot.webcom.twitter.exception.MissingOAuthConfigException;
 
+/**
+ * Activity for login logic
+ */
 public class LoginActivity extends BaseActivity {
 	private LoginComponent login;
 

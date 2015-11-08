@@ -73,8 +73,8 @@ public class GsonUtil {
 	}
 
 	/**
-	 * ExclusionStrategy for Gson, excludes everything annotated with @Exclude, more declarative
-	 * than using transient keyword.
+	 * ExclusionStrategy for Gson, excludes everything annotated with @Exclude, much more declarative
+	 * than using Java transient keyword.
 	 */
 	public static class TwitterExclusionStrategy implements ExclusionStrategy {
 		Class[] exclude;

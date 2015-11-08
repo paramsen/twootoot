@@ -9,6 +9,8 @@ import se.amsen.par.twootoot.webcom.twitter.resource.HomeTimelineResource.HomeTi
 import se.amsen.par.twootoot.webcom.twitter.resource.HomeTimelineResource.HomeTimelineResp;
 
 /**
+ * HomeTimelineList model
+ *
  * @author params on 04/11/15
  */
 public class HomeTimelineList extends AbstractModel{

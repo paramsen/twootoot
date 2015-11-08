@@ -3,11 +3,17 @@ package se.amsen.par.twootoot.util.utils;
 import java.io.IOException;
 
 /**
+ * Utility methods for checking internet connection
+ *
  * @author params on 06/11/15
  */
 public class ConnectionUtil {
-	public static boolean isOnline() {
 
+	/**
+	 * Pings Google DNS server (The "largest" DNS server in the world). Could be viable to provide
+	 * custom IP to ping, ex. pinging Twitter.
+	 */
+	public static boolean isOnline() {
 		Runtime runtime = Runtime.getRuntime();
 		try {
 

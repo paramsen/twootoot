@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.result.Result;
 import se.amsen.par.twootoot.util.annotation.Exclude;
 
 /**
+ * A generic Request for communicating with any endpoint.
+ *
  * @author params on 28/10/15
  */
 public abstract class Request extends Message {

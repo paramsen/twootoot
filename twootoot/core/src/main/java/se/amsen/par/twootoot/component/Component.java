@@ -1,6 +1,7 @@
 package se.amsen.par.twootoot.component;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -88,5 +89,12 @@ public abstract class Component extends FrameLayout {
 
 	public BaseActivity getActivity() {
 		return activity;
+	}
+
+	/**
+	 * Activity could if viable let Component save its state
+	 */
+	public void onSaveInstanceState(Bundle outState) {
+		throw new RuntimeException("Not implemented");
 	}
 }

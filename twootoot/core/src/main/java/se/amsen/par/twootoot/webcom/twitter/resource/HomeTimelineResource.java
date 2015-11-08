@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
+import se.amsen.par.twootoot.util.annotation.Optional;
 import se.amsen.par.twootoot.util.annotation.UrlParameter;
 import se.amsen.par.twootoot.webcom.Resource;
 import se.amsen.par.twootoot.webcom.Response;
@@ -30,9 +31,9 @@ public class HomeTimelineResource extends Resource {
 			this.includeEntities = includeEntities;
 		}
 
-		@UrlParameter @SerializedName("count") public Integer count = 1;
-		@UrlParameter @SerializedName("since_id") public Integer sinceId = 1;
-		@UrlParameter @SerializedName("include_entities") public Boolean includeEntities = false;
+		@Optional @UrlParameter @SerializedName("count") public Integer count = 1;
+		@Optional @UrlParameter @SerializedName("since_id") public Integer sinceId = 1;
+		@Optional @UrlParameter @SerializedName("include_entities") public Boolean includeEntities = false;
 	}
 
 	public static class HomeTimelineListResp extends Response {

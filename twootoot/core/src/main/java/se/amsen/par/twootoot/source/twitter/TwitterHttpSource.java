@@ -10,14 +10,14 @@ import java.net.HttpURLConnection;
 
 import se.amsen.par.twootoot.BuildConfig;
 import se.amsen.par.twootoot.source.AbstractSource;
-import se.amsen.par.twootoot.source.twitter.result.Failure;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.result.Failure;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 import se.amsen.par.twootoot.util.utils.GsonUtil;
 import se.amsen.par.twootoot.webcom.Request;
 import se.amsen.par.twootoot.webcom.Response;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.HttpStatusException;
+import se.amsen.par.twootoot.webcom.twitter.exception.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exception.HttpStatusException;
 
 /**
  * HTTPSource is a Source that provides HTTP logic for webcom.

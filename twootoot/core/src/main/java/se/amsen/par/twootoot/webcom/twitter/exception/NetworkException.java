@@ -1,6 +1,8 @@
-package se.amsen.par.twootoot.webcom.twitter.exceptions;
+package se.amsen.par.twootoot.webcom.twitter.exception;
 
 /**
+ * Exception for when something unexpected happened during HTTP logic
+ *
  * @author params on 04/11/15
  */
 public class NetworkException extends Exception {

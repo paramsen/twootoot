@@ -17,10 +17,10 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import se.amsen.par.twootoot.BuildConfig;
-import se.amsen.par.twootoot.source.GenericSourceException;
-import se.amsen.par.twootoot.source.twitter.result.Failure;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.exception.GenericSourceException;
+import se.amsen.par.twootoot.source.result.Failure;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.util.annotation.Exclude;
 import se.amsen.par.twootoot.util.annotation.UrlParameter;

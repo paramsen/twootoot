@@ -7,5 +7,5 @@ package se.amsen.par.twootoot.util.functional;
  */
 public interface Callback<T> {
 	void onComplete(T result);
-	//TODO void onProgress(Progress<T> progress);
+	//TODO void onProgress(Progress<T> progress); does anyone need this?
 }

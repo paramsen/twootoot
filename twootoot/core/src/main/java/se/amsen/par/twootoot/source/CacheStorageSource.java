@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.Serializable;
 
-import se.amsen.par.twootoot.source.twitter.result.Failure;
-import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.result.Failure;
+import se.amsen.par.twootoot.source.result.Result;
 
 /**
  * @author params on 07/11/15

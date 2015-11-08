@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for Model fields
+ * Annotation for Request fields implying that they are optional as specified by external API
  *
  * @author params on 27/10/15
  */

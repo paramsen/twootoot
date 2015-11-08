@@ -52,8 +52,10 @@
         android:id="@+id/fabTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_edit"
-        app:layout_scrollFlags="exitUntilCollapsed"/>
+        app:layout_behavior="se.amsen.par.twootoot.behavior.coordinator_layout.ScrollAwareFABBehavior"
+        app:layout_anchor="@+id/recyclerTweetList"
+        app:layout_anchorGravity="bottom|right|end"
+        android:clickable="true"/>
 </android.support.design.widget.CoordinatorLayout>

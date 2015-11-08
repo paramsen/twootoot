@@ -2,6 +2,7 @@ package se.amsen.par.twootoot.component.twitter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import se.amsen.par.twootoot.R;
-import se.amsen.par.twootoot.behavior.NetworkExceptionBehavior;
+import se.amsen.par.twootoot.behavior.exception.NetworkExceptionBehavior;
 import se.amsen.par.twootoot.component.Component;
 import se.amsen.par.twootoot.component.behavior.WaitBehavior;
 import se.amsen.par.twootoot.model.Event;
@@ -29,9 +30,9 @@ import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 import se.amsen.par.twootoot.model.twitter.Tweet;
 import se.amsen.par.twootoot.source.twitter.FireAndForgetSource;
 import se.amsen.par.twootoot.source.twitter.OAuthSource;
-import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.result.Result;
 import se.amsen.par.twootoot.util.functional.Callback;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exception.NetworkException;
 import se.amsen.par.twootoot.webcom.twitter.resource.RetweetResource;
 
 /**
@@ -206,8 +207,6 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 		private TextView content;
 		private boolean hasTransitioned;
 
-		private Tweet tweet;
-
 		public TweetHolder(View itemView) {
 			super(itemView);
 			profilePicture = (ImageView) itemView.findViewById(R.id.profilePicture);
@@ -217,8 +216,6 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 		}
 
 		public void bindTweet(Tweet tweet) {
-			this.tweet = tweet;
-
 			if(tweet.user.profileImageDrawable != null) {
 				if(!hasTransitioned) {
 					profilePicture.setAlpha(0f);
@@ -237,6 +234,13 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 			content.setText(tweet.text);
 
 
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		if(getRecyclerView() != null) {
+			outState.putParcelable(TweetListComponent.class.getName(), getRecyclerView().getLayoutManager().onSaveInstanceState());
 		}
 	}
 

@@ -6,16 +6,16 @@ import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
-import se.amsen.par.twootoot.source.GenericSourceException;
-import se.amsen.par.twootoot.source.twitter.result.Failure;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.exception.GenericSourceException;
+import se.amsen.par.twootoot.source.result.Failure;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 import se.amsen.par.twootoot.util.functional.AsyncRunner;
 import se.amsen.par.twootoot.util.functional.Callback;
 import se.amsen.par.twootoot.util.functional.Func1;
 import se.amsen.par.twootoot.webcom.Request;
 import se.amsen.par.twootoot.webcom.Response;
-import se.amsen.par.twootoot.webcom.twitter.exceptions.NetworkException;
+import se.amsen.par.twootoot.webcom.twitter.exception.NetworkException;
 
 /**
  * Source to be used for requests that require no particular result else than Success or Failure.

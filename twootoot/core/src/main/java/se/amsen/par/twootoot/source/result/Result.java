@@ -1,8 +1,15 @@
-package se.amsen.par.twootoot.source.twitter.result;
+package se.amsen.par.twootoot.source.result;
 
 /**
  * Base Result for use in inter thread communication and Exception handling. A Source is responsible
  * for calling the provided Callback with a Result.
+ *
+ * Results are used to minimize the complexity introduced by Exceptions.
+ * Ex. when a AsyncRunner has finished and calls Callback.onComplete(Result) on UI thread,
+ * Callback.onComplete must check Result.isSuccess. If Result.isSuccess == false an Exception is
+ * wrapped and can be retrieved by calling Result.asFailure().get().
+ * This also means that when AsyncRunner fails with an Exception it will not silently die with its
+ * owning Thread, but report back to Callback.onComplete with a Failure.
  *
  * @author params on 25/10/15
  */

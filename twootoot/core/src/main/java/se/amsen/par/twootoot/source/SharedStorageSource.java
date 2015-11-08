@@ -5,9 +5,10 @@ import android.content.SharedPreferences;
 
 import com.google.gson.JsonSyntaxException;
 
-import se.amsen.par.twootoot.source.twitter.result.Failure;
-import se.amsen.par.twootoot.source.twitter.result.Result;
-import se.amsen.par.twootoot.source.twitter.result.Success;
+import se.amsen.par.twootoot.source.exception.GenericSourceException;
+import se.amsen.par.twootoot.source.result.Failure;
+import se.amsen.par.twootoot.source.result.Result;
+import se.amsen.par.twootoot.source.result.Success;
 import se.amsen.par.twootoot.util.utils.GsonUtil;
 
 /**

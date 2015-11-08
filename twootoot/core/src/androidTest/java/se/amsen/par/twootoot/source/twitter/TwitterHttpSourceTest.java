@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import se.amsen.par.testlib.testlib.UnitTestUtil;
 import se.amsen.par.testlib.testlib.twitter.Mocks;
-import se.amsen.par.twootoot.source.twitter.result.Result;
+import se.amsen.par.twootoot.source.result.Result;
 import se.amsen.par.twootoot.model.twitter.OAuthConfig;
 
 import static org.mockito.Matchers.*;
