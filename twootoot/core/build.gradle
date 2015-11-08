@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
 apply from: 'ignore.gradle' //This file is ignored, look at publicIgnore.gradle for more info
 
 def str = {"\"$it\""}
@@ -6,6 +8,11 @@ def str = {"\"$it\""}
 android {
     compileSdkVersion 23
     buildToolsVersion "22.0.1"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         applicationId "se.amsen.par.twootoot"
