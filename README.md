@@ -3,6 +3,10 @@ _Acheiving Twitter excellence 140 chars at a time._
 
 ## Breakdown
 _[a MVC twitter client in Android]_
+
+![Demo animation](http://url/to/img.png)
+
+
 ### Info
 This project is aimed at achieving a basic twitter integration complete with some basic user interaction listed below using no frameworks.
 Why no frameworks? Well just to show some good'ol Java knowledge.
@@ -21,16 +25,3 @@ Why no frameworks? Well just to show some good'ol Java knowledge.
   * Swipe retweet/answer
 * Landscape
   * Buttons for retweet/answer
-
-## Process
-Planning in iterations where the result of each finished iteration is presentable to the (hypothetical) client.
-
-* __Iteration 1__
-  * Model in [M]VC
-  * HTTP boilerplate
-    * Twitter auth
-* __Iteration 2__
-  * Login
-    * Twitter integration
-* __Iteration 3__
-  * TBD

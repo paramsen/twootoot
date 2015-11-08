@@ -31,8 +31,13 @@ public class LoginActivity extends BaseActivity {
 			if(result) {
 				new OAuthSource(LoginActivity.this).authorizeAsync(null, result1 -> {
 					if (result1.isSuccess()) {
-						startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-						finish();
+						postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+								finish();
+							}
+						}, TimeUnit.SECONDS, 2);
 					} else {
 						if (result1.asFailure().get() instanceof MissingOAuthConfigException) {
 							login.onReady(null);
