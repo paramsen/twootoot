@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
@@ -42,6 +43,7 @@ import se.amsen.par.twootoot.webcom.twitter.resource.StatusUpdateResource;
 public class HomeActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 	private TweetListComponent tweetListComponent;
 	private AppBarLayout appBarLayout;
+	private FloatingActionButton fabTweet;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class HomeActivity extends BaseActivity implements AppBarLayout.OnOffsetC
 		setContentView(R.layout.activity_home);
 
 		initViews(savedInstanceState);
+
 		getTweets();
 	}
 
@@ -72,12 +75,80 @@ public class HomeActivity extends BaseActivity implements AppBarLayout.OnOffsetC
 			appBarLayout.setExpanded(false);
 		}
 
+		initTweetFab();
+
 		tweetListComponent = (TweetListComponent) findViewById(R.id.tweetListComponent);
 
-		findViewById(R.id.fabTweet).setOnClickListener(new View.OnClickListener() {
+	}
+
+	private void initTweetFab() {
+		fabTweet = (FloatingActionButton) findViewById(R.id.fabTweet);
+		fabTweet.setVisibility(View.INVISIBLE);
+		fabTweet.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				HomeActivity.this.startActivity(new Intent(HomeActivity.this, TweetActivity.class));
+			}
+		});
+	}
+
+	private void getTweets() {
+		new HomeTimelineSource(this).getAsync(new HomeTimelineSource.Params(199, null, null), new Callback<Result<HomeTimelineList>>() {
+			@Override
+			public void onComplete(Result<HomeTimelineList> result) {
+				if (result.isSuccess()) {
+					onRetrievedTweets(result.asSuccess().get());
+				} else if (result.asFailure().get() instanceof TimeoutException || result.asFailure().get() instanceof NetworkException) {
+					NetworkExceptionBehavior.showSnackbar(HomeActivity.this, new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							getTweets();
+						}
+					});
+				} else {
+					Snackbar.make(HomeActivity.this.findViewById(android.R.id.content), "Could not retrieve timeline", Snackbar.LENGTH_INDEFINITE)
+							.setAction("Retry", new View.OnClickListener() {
+								@Override
+								public void onClick(View v) {
+									getTweets();
+								}
+							}).show();
+				}
+			}
+		}, TimeUnit.SECONDS, 30);
+	}
+
+	private void onRetrievedTweets(HomeTimelineList homeTimelineList) {
+		tweetListComponent.onReady(new Event<>(homeTimelineList.tweets));
+		getProfileImages(homeTimelineList.tweets);
+		fabTweet.setVisibility(View.VISIBLE);
+	}
+
+	private void getProfileImages(final List<Tweet> tweets) {
+		List<Pair<Integer, String>> pairedTweets = new ArrayList<>();
+		for(int i = 0 ; i < tweets.size() ; i++) {
+			pairedTweets.add(new Pair<>(i, tweets.get(i).user.profileImageUrl));
+		}
+
+		new ImageSource(this).getDrawables(new ImageSource.Params(tweetListComponent, pairedTweets, new Callback<Pair<Integer, Drawable>>() {
+			@Override
+			public void onComplete(Pair<Integer, Drawable> result) {
+				tweets.get(result.first).user.profileImageDrawable = result.second;
+				tweetListComponent.getDataSetAdapter().notifyItemChanged(result.first);
+			}
+		}), new Callback<Result<Void>>() {
+			@Override
+			public void onComplete(Result<Void> result) {
+				if (result.isSuccessIgnoreValue()) {
+					return;
+				} else if (result.asFailure().get() instanceof TimeoutException || result.asFailure().get() instanceof NetworkException) {
+					NetworkExceptionBehavior.showSnackbar(HomeActivity.this, new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							getProfileImages(tweets);
+						}
+					});
+				}
 			}
 		});
 	}
@@ -116,62 +187,6 @@ public class HomeActivity extends BaseActivity implements AppBarLayout.OnOffsetC
 					}
 				})
 				.show();
-	}
-
-	private void getTweets() {
-		new HomeTimelineSource(this).getAsync(new HomeTimelineSource.Params(199, null, null), new Callback<Result<HomeTimelineList>>() {
-			@Override
-			public void onComplete(Result<HomeTimelineList> result) {
-				if(result.isSuccess()) {
-					tweetListComponent.onReady(new Event<>(result.asSuccess().get().tweets));
-					getProfileImages(result.asSuccess().get().tweets);
-				} else if(result.asFailure().get() instanceof TimeoutException || result.asFailure().get() instanceof NetworkException) {
-					NetworkExceptionBehavior.showSnackbar(HomeActivity.this, new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							getTweets();
-						}
-					});
-				} else {
-					Snackbar.make(HomeActivity.this.findViewById(android.R.id.content), "Could not retrieve timeline", Snackbar.LENGTH_INDEFINITE)
-							.setAction("Retry", new View.OnClickListener() {
-								@Override
-								public void onClick(View v) {
-									getTweets();
-								}
-							}).show();
-				}
-			}
-		}, TimeUnit.SECONDS, 30);
-	}
-
-	private void getProfileImages(final List<Tweet> tweets) {
-		List<Pair<Integer, String>> pairedTweets = new ArrayList<>();
-		for(int i = 0 ; i < tweets.size() ; i++) {
-			pairedTweets.add(new Pair<>(i, tweets.get(i).user.profileImageUrl));
-		}
-
-		new ImageSource(this).getDrawables(new ImageSource.Params(tweetListComponent, pairedTweets, new Callback<Pair<Integer, Drawable>>() {
-			@Override
-			public void onComplete(Pair<Integer, Drawable> result) {
-				tweets.get(result.first).user.profileImageDrawable = result.second;
-				tweetListComponent.getDataSetAdapter().notifyItemChanged(result.first);
-			}
-		}), new Callback<Result<Void>>() {
-			@Override
-			public void onComplete(Result<Void> result) {
-				if (result.isSuccessIgnoreValue()) {
-					return;
-				} else if(result.asFailure().get() instanceof TimeoutException || result.asFailure().get() instanceof NetworkException) {
-					NetworkExceptionBehavior.showSnackbar(HomeActivity.this, new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							getProfileImages(tweets);
-						}
-					});
-				}
-			}
-		});
 	}
 
 	@Override

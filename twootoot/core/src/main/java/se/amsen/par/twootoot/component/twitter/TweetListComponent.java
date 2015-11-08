@@ -158,7 +158,7 @@ public class TweetListComponent extends Component implements WaitBehavior<List<T
 	}
 
 	private void onRetweetError(final RecyclerView.ViewHolder viewHolder) {
-		Snackbar.make(getComponentRoot(), "Could not retweet", Snackbar.LENGTH_INDEFINITE)
+		Snackbar.make(getComponentRoot(), "Could not retweet", Snackbar.LENGTH_LONG)
 				.setAction("Retry", new OnClickListener() {
 					@Override
 					public void onClick(View v) {

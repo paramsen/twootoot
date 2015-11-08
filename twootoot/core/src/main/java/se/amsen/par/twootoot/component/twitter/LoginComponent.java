@@ -85,10 +85,13 @@ public class LoginComponent extends Component implements WaitBehavior<Void> {
 	 * "token" and "secret" to get acces to my private tokens for simplicity.
 	 */
 	public void authorize() {
-		if(token.getText().toString().equalsIgnoreCase("token") && secret.getText().toString().equalsIgnoreCase("secret")) {
+		String token = this.token.getText().toString();
+		String secret = this.secret.getText().toString();
+
+		if(token.equalsIgnoreCase("token") && secret.equalsIgnoreCase("secret")) {
 			oauth.authorizeAsync(new OAuthConfig.OAuthTokens(BuildConfig.OAUTH_ACCESS_TOKEN, BuildConfig.OAUTH_ACCESS_TOKEN_SECRET), getAuthorizeCallback(), TimeUnit.SECONDS, 30);
 		} else {
-			onFailedAuth();
+			oauth.authorizeAsync(new OAuthConfig.OAuthTokens(token, secret), getAuthorizeCallback(), TimeUnit.SECONDS, 30);
 		}
 	}
 
